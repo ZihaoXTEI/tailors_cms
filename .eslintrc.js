@@ -3,7 +3,7 @@ module.exports = {
 
   env: {
     node: true,
-    es2021: true,
+    es2021: true
   },
 
   parser: '@typescript-eslint/parser',
@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
     tsconfigRootDir: __dirname,
-    project: ['./tsconfig.eslint.json'],
+    project: ['./tsconfig.eslint.json']
   },
 
   plugins: ['@typescript-eslint'],
@@ -36,12 +36,14 @@ module.exports = {
     '@typescript-eslint/ban-types': 'off',
     'no-prototype-builtins': 'off',
     'space-before-function-paren': 0,
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off'
   },
 
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'prettier',
-  ],
+    'prettier'
+  ]
 }

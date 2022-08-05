@@ -1,12 +1,14 @@
-import { Column, Entity } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
+import BaseEntity from './BaseEntity'
+import Fabric from './Fabric'
 
 @Entity('fabric_inventory_tb')
-export default class FabricInventory {
+export default class FabricInventory extends BaseEntity {
   @Column({
     name: 'inventory',
     type: 'double',
     default: 0.0,
-    comment: '库存量',
+    comment: '库存量'
   })
   inventory!: number
 
@@ -14,7 +16,7 @@ export default class FabricInventory {
     name: 'position',
     type: 'varchar',
     length: 32,
-    comment: '布料库存位置',
+    comment: '布料库存位置'
   })
   position!: string
 
@@ -22,9 +24,15 @@ export default class FabricInventory {
     name: 'pre_volume',
     type: 'double',
     default: 0.0,
-    comment: '布料预定用量',
+    comment: '布料预定用量'
   })
   preVolume!: number
 
   // fabric_id
+  @OneToOne(() => Fabric)
+  @JoinColumn({
+    name: 'fabric_id',
+    referencedColumnName: 'id'
+  })
+  fabric!: Fabric
 }

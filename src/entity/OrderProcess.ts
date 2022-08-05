@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
 import BaseEntity from './BaseEntity'
+import Order from './Order'
 
 @Entity('order_process_tb')
 export default class OrderProcess extends BaseEntity {
@@ -8,7 +9,7 @@ export default class OrderProcess extends BaseEntity {
     type: 'varchar',
     length: 36,
     nullable: true,
-    comment: '裁缝员工索引',
+    comment: '裁缝员工索引'
   })
   tailor!: string | undefined
 
@@ -16,7 +17,7 @@ export default class OrderProcess extends BaseEntity {
     name: 'tailor_date',
     type: 'datetime',
     nullable: true,
-    comment: '裁缝日期',
+    comment: '裁缝日期'
   })
   tailorDate!: Date | undefined
 
@@ -25,7 +26,7 @@ export default class OrderProcess extends BaseEntity {
     type: 'varchar',
     length: 36,
     nullable: true,
-    comment: '缝制员工索引',
+    comment: '缝制员工索引'
   })
   sew!: string | undefined
 
@@ -33,7 +34,7 @@ export default class OrderProcess extends BaseEntity {
     name: 'sew_date',
     type: 'datetime',
     nullable: true,
-    comment: '缝制日期',
+    comment: '缝制日期'
   })
   sewDate!: Date | undefined
 
@@ -42,7 +43,7 @@ export default class OrderProcess extends BaseEntity {
     type: 'varchar',
     length: 36,
     nullable: true,
-    comment: '整烫员工索引',
+    comment: '整烫员工索引'
   })
   iron!: string | undefined
 
@@ -50,7 +51,7 @@ export default class OrderProcess extends BaseEntity {
     name: 'iron_date',
     type: 'datetime',
     nullable: true,
-    comment: '整烫日期',
+    comment: '整烫日期'
   })
   ironDate!: Date | undefined
 
@@ -59,7 +60,7 @@ export default class OrderProcess extends BaseEntity {
     type: 'varchar',
     length: 36,
     nullable: true,
-    comment: '成衣员工索引',
+    comment: '成衣员工索引'
   })
   finish!: string | undefined
 
@@ -67,9 +68,14 @@ export default class OrderProcess extends BaseEntity {
     name: 'finish_date',
     type: 'datetime',
     nullable: true,
-    comment: '成衣日期',
+    comment: '成衣日期'
   })
   finishDate!: Date | undefined
 
-  // order_id
+  @OneToOne(() => Order, (order) => order.orderProcess)
+  @JoinColumn({
+    name: 'order_id',
+    referencedColumnName: 'id'
+  })
+  order!: Order
 }

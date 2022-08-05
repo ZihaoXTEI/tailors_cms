@@ -1,8 +1,6 @@
 import { DataSource } from 'typeorm'
 import * as dotenv from 'dotenv'
 
-import User from '../entity/User'
-
 dotenv.config()
 
 const MYSQL_HOST = process.env.MYSQL_HOST
@@ -11,9 +9,7 @@ const MYSQL_DATABASE = process.env.MYSQL_DATABASE
 const MYSQL_USER = process.env.MYSQL_USER
 const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD
 
-console.log(__dirname)
-
-const AppDataSource = new DataSource({
+export const AppDataSource = new DataSource({
   type: 'mysql',
   host: MYSQL_HOST,
   port: MYSQL_PORT,
@@ -22,7 +18,7 @@ const AppDataSource = new DataSource({
   database: MYSQL_DATABASE,
   entities: [__dirname + '/../entity/*.ts'],
   synchronize: true,
-  logging: false,
+  logging: false
 })
 
 export default AppDataSource.initialize()

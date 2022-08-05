@@ -1,7 +1,10 @@
-import { Column, Entity } from 'typeorm'
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm'
 import BaseEntity from './BaseEntity'
 
 import { Gender, Status } from '../types/entityType'
+import User from './User'
+import Order from './Order'
+import Favorite from './Favorite'
 
 @Entity('customer_tb')
 export default class Customer extends BaseEntity {
@@ -10,7 +13,7 @@ export default class Customer extends BaseEntity {
     type: 'varchar',
     length: 16,
     nullable: false,
-    comment: '顾客姓名',
+    comment: '顾客姓名'
   })
   customerName!: String
 
@@ -19,7 +22,7 @@ export default class Customer extends BaseEntity {
     type: 'enum',
     enum: Gender,
     nullable: false,
-    comment: '顾客性别',
+    comment: '顾客性别'
   })
   customerGender!: Gender
 
@@ -28,7 +31,7 @@ export default class Customer extends BaseEntity {
     type: 'varchar',
     length: 11,
     nullable: true,
-    comment: '顾客联系电话',
+    comment: '顾客联系电话'
   })
   customerPhone!: string
 
@@ -37,7 +40,7 @@ export default class Customer extends BaseEntity {
     type: 'varchar',
     length: 64,
     nullable: true,
-    comment: '顾客住址',
+    comment: '顾客住址'
   })
   customerAddress!: string
 
@@ -45,7 +48,20 @@ export default class Customer extends BaseEntity {
     type: 'enum',
     enum: Status,
     default: Status.NORMAL,
-    comment: '顾客账号状态',
+    comment: '顾客账号状态'
   })
   status!: Status
+
+  @OneToOne(() => User, (user) => user.customer)
+  @JoinColumn({
+    name: 'user_id',
+    referencedColumnName: 'id'
+  })
+  user!: User
+
+  @OneToMany(() => Order, (order) => order.customer)
+  orderList!: Order[]
+
+  @OneToMany(() => Favorite, (favorite) => favorite.customer)
+  favoriteList!: Favorite[]
 }

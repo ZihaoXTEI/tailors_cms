@@ -3,17 +3,18 @@ import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import database from './database'
 
-import useRouter from '../router/user.router'
+import { useRoutes } from '../router'
+import { errorHandler } from './errorHandler'
+
+database.then(() => {
+  console.log('MySQL连接成功')
+})
 
 const app = new Koa()
 
 app.use(bodyParser())
 
-app.use(useRouter.routes())
-app.use(useRouter.allowedMethods())
-
-const mysql = database.then(() => {
-  console.log('MySQL连接成功')
-})
+useRoutes(app)
+app.on('error', errorHandler)
 
 export { app }

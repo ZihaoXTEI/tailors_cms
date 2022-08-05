@@ -1,6 +1,10 @@
-import { Status } from '@/types/entityType'
-import { Column, Entity } from 'typeorm'
+import { Status } from '../types/entityType'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import BaseEntity from './BaseEntity'
+import FabricInbound from './FabricInbound'
+import FabricType from './FabricType'
+import Favorite from './Favorite'
+import OrderFabric from './OrderFabric'
 
 @Entity('fabric_tb')
 export default class Fabric extends BaseEntity {
@@ -9,14 +13,14 @@ export default class Fabric extends BaseEntity {
     type: 'varchar',
     length: 32,
     unique: true,
-    comment: '布料名称',
+    comment: '布料名称'
   })
   fabricName!: string
 
   @Column({
     name: 'fabric_width',
     type: 'double',
-    comment: '布料幅宽',
+    comment: '布料幅宽'
   })
   fabricWidth!: number
 
@@ -24,7 +28,7 @@ export default class Fabric extends BaseEntity {
     name: 'fabric_price',
     type: 'double',
     default: 0.0,
-    comment: '布料价格',
+    comment: '布料价格'
   })
   fabricPrice!: number
 
@@ -33,7 +37,7 @@ export default class Fabric extends BaseEntity {
     type: 'varchar',
     length: 128,
     default: '',
-    comment: '布料图片路径',
+    comment: '布料图片路径'
   })
   fabricUrl!: string
 
@@ -42,7 +46,7 @@ export default class Fabric extends BaseEntity {
     type: 'varchar',
     length: 80,
     default: '',
-    comment: '布料特性',
+    comment: '布料特性'
   })
   fabricFeature!: string
 
@@ -50,9 +54,22 @@ export default class Fabric extends BaseEntity {
     type: 'enum',
     enum: Status,
     default: Status.NORMAL,
-    comment: '布料状态',
+    comment: '布料状态'
   })
   status!: Status
 
-  // fabrictype_id
+  @ManyToOne(() => FabricType, (fabricType) => fabricType.fabricList)
+  @JoinColumn({
+    name: 'fabrictype_id'
+  })
+  fabricType!: FabricType
+
+  @OneToMany(() => FabricInbound, (fabricInbound) => fabricInbound.fabric)
+  fabricInboundList!: FabricInbound[]
+
+  @OneToMany(() => OrderFabric, (orderFabirc) => orderFabirc.fabric)
+  orderFabricList!: OrderFabric[]
+
+  @OneToMany(() => Favorite, (favorite) => favorite.fabric)
+  favoriteList!: Favorite[]
 }

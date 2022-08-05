@@ -11,7 +11,7 @@ export default class Role extends BaseEntity {
     type: 'varchar',
     length: 24,
     nullable: false,
-    comment: '角色名称',
+    comment: '角色名称'
   })
   roleName!: string
 
@@ -20,7 +20,7 @@ export default class Role extends BaseEntity {
     type: 'varchar',
     length: 64,
     nullable: true,
-    comment: '角色说明',
+    comment: '角色说明'
   })
   roleRemark: string | undefined
 
@@ -28,16 +28,16 @@ export default class Role extends BaseEntity {
     type: 'enum',
     enum: Status,
     default: Status.NORMAL,
-    comment: '状态',
+    comment: '状态'
   })
   status!: Status
 
   @ManyToMany(() => User, (user) => user.roleList)
   @JoinTable({
-    name: 'user_role_tb',
+    name: 'user_role_tb'
   })
-  userList: User[] | undefined
+  userList!: User[]
 
   @ManyToMany(() => Permission, (permission) => permission.roleList)
-  permissionList: Permission[] | undefined
+  permissionList!: Permission[]
 }

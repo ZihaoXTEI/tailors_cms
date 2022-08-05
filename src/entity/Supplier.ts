@@ -1,6 +1,7 @@
-import { Status } from '@/types/entityType'
-import { Column, Entity } from 'typeorm'
+import { Status } from '../types/entityType'
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm'
 import BaseEntity from './BaseEntity'
+import FabricInbound from './FabricInbound'
 
 @Entity('supplier_tb')
 export default class Supplier extends BaseEntity {
@@ -8,7 +9,7 @@ export default class Supplier extends BaseEntity {
     name: 'supplier_name',
     type: 'varchar',
     length: 32,
-    comment: '供应商名称',
+    comment: '供应商名称'
   })
   supplierName!: string
 
@@ -16,7 +17,7 @@ export default class Supplier extends BaseEntity {
     name: ' supplier_address',
     type: 'varchar',
     length: 64,
-    comment: '供应商地址',
+    comment: '供应商地址'
   })
   supplierAddress!: string
 
@@ -26,7 +27,7 @@ export default class Supplier extends BaseEntity {
     length: 11,
     nullable: true,
     unique: true,
-    comment: '供应商联系电话',
+    comment: '供应商联系电话'
   })
   supplierPhone: string | undefined
 
@@ -34,7 +35,10 @@ export default class Supplier extends BaseEntity {
     type: 'enum',
     enum: Status,
     default: Status.NORMAL,
-    comment: '供应商状态',
+    comment: '供应商状态'
   })
   status!: Status
+
+  @OneToMany(() => FabricInbound, (fabricInbound) => fabricInbound.supplier)
+  fabricInboundList!: FabricInbound[]
 }

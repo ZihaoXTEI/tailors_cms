@@ -1,5 +1,5 @@
 import { Status } from '../types/entityType'
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import Menu from './Menu'
 import Role from './Role'
@@ -10,7 +10,7 @@ export default class Permission extends BaseEntity {
     name: 'permission_name',
     type: 'varchar',
     length: 32,
-    comment: '权限名称',
+    comment: '权限名称'
   })
   permissionName!: string
 
@@ -18,7 +18,7 @@ export default class Permission extends BaseEntity {
     name: 'permission_describe',
     type: 'varchar',
     length: 64,
-    comment: '权限描述',
+    comment: '权限描述'
   })
   permissionDescribe: string | undefined
 
@@ -27,7 +27,7 @@ export default class Permission extends BaseEntity {
     type: 'varchar',
     length: 64,
     nullable: true,
-    comment: '权限说明',
+    comment: '权限说明'
   })
   permissionRemark: string | undefined
 
@@ -35,16 +35,20 @@ export default class Permission extends BaseEntity {
     type: 'enum',
     enum: Status,
     default: Status.NORMAL,
-    comment: '状态',
+    comment: '状态'
   })
   status!: Status
 
   @ManyToOne(() => Menu, (menu) => menu.permissionList)
+  @JoinColumn({
+    name: 'menu_id',
+    referencedColumnName: 'id'
+  })
   menu: Menu | undefined
 
   @ManyToMany(() => Role, (role) => role.permissionList)
   @JoinTable({
-    name: 'role_permission_tb',
+    name: 'role_permission_tb'
   })
-  roleList: Role[] | undefined
+  roleList!: Role[]
 }

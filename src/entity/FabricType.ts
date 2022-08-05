@@ -1,14 +1,16 @@
-import { Status } from '@/types/entityType'
-import { Column, Entity } from 'typeorm'
+import { Status } from '../types/entityType'
+import { Column, Entity, OneToMany } from 'typeorm'
+import Fabric from './Fabric'
+import BaseEntity from './BaseEntity'
 
 @Entity('fabrictype_tb')
-export default class FabricType {
+export default class FabricType extends BaseEntity {
   @Column({
     name: 'fabrictype_name',
     type: 'varchar',
     length: 24,
     unique: true,
-    comment: '布料名称',
+    comment: '布料名称'
   })
   fabrictypeName!: string
 
@@ -16,7 +18,7 @@ export default class FabricType {
     name: 'fabrictypeRemark',
     type: 'varchar',
     length: 64,
-    comment: '布料说明',
+    comment: '布料说明'
   })
   fabrictype_remark: string | undefined
 
@@ -24,7 +26,10 @@ export default class FabricType {
     type: 'enum',
     enum: Status,
     default: Status.NORMAL,
-    comment: '布料类型状态',
+    comment: '布料类型状态'
   })
   status!: Status
+
+  @OneToMany(() => Fabric, (fabric) => fabric.fabricType)
+  fabricList!: Fabric[]
 }
