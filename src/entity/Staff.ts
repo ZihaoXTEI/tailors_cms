@@ -1,11 +1,28 @@
 import { Gender, Status } from '../types/entityType'
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm'
-import BaseEntity from './BaseEntity'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  UpdateDateColumn
+} from 'typeorm'
 import FabricInbound from './FabricInbound'
 import User from './User'
 
 @Entity('staff_tb')
-export default class Staff extends BaseEntity {
+export default class Staff {
+  @PrimaryColumn({
+    name: 'user_id',
+    type: 'varchar',
+    length: 36,
+    nullable: false,
+    comment: '员工编号'
+  })
+  userId!: String
+
   @Column({
     name: 'staff_name',
     type: 'varchar',
@@ -60,6 +77,16 @@ export default class Staff extends BaseEntity {
     comment: '员工账号状态'
   })
   status!: Status
+
+  @CreateDateColumn({
+    name: 'create_at'
+  })
+  createAt!: Date
+
+  @UpdateDateColumn({
+    name: 'update_at'
+  })
+  updateAt!: Date
 
   @OneToOne(() => User, (user) => user.staff)
   @JoinColumn({

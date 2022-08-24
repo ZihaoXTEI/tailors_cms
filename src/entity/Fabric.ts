@@ -1,4 +1,4 @@
-import { Status } from '../types/entityType'
+import { Gender, Season, Status } from '../types/entityType'
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import FabricInbound from './FabricInbound'
@@ -49,6 +49,24 @@ export default class Fabric extends BaseEntity {
     comment: '布料特性'
   })
   fabricFeature!: string
+
+  @Column({
+    name: 'fabric_season',
+    type: 'enum',
+    enum: Season,
+    default: Season.SPRING,
+    comment: '布料适合季节'
+  })
+  fabricSeason!: Season
+
+  @Column({
+    name: 'fabric_gender',
+    type: 'enum',
+    enum: Gender,
+    default: Gender.BOTH,
+    comment: '布料适合性别'
+  })
+  fabricGender!: Gender
 
   @Column({
     type: 'enum',

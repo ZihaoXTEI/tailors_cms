@@ -1,5 +1,13 @@
-import { Entity, Column, ManyToMany, OneToOne } from 'typeorm'
-import BaseEntity from './BaseEntity'
+import {
+  Entity,
+  Column,
+  ManyToMany,
+  OneToOne,
+  UpdateDateColumn,
+  CreateDateColumn,
+  PrimaryGeneratedColumn
+} from 'typeorm'
+// import BaseEntity from './BaseEntity'
 
 import { Status } from '../types/entityType'
 import Role from './Role'
@@ -7,7 +15,20 @@ import Customer from './Customer'
 import Staff from './Staff'
 
 @Entity('user_tb')
-export default class User extends BaseEntity {
+export default class User {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string
+
+  @CreateDateColumn({
+    name: 'create_at'
+  })
+  createAt!: Date
+
+  @UpdateDateColumn({
+    name: 'update_at'
+  })
+  updateAt!: Date
+
   @Column({
     type: 'varchar',
     length: 24,

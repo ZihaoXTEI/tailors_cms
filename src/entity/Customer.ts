@@ -1,13 +1,30 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm'
-import BaseEntity from './BaseEntity'
-
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+  UpdateDateColumn
+} from 'typeorm'
 import { Gender, Status } from '../types/entityType'
 import User from './User'
 import Order from './Order'
 import Favorite from './Favorite'
+import AnthroMeasure from './AnthroMeasure'
 
 @Entity('customer_tb')
-export default class Customer extends BaseEntity {
+export default class Customer {
+  @PrimaryColumn({
+    name: 'user_id',
+    type: 'varchar',
+    length: 36,
+    nullable: false,
+    comment: '顾客编号'
+  })
+  userId!: String
+
   @Column({
     name: 'customer_name',
     type: 'varchar',
@@ -52,6 +69,16 @@ export default class Customer extends BaseEntity {
   })
   status!: Status
 
+  @CreateDateColumn({
+    name: 'create_at'
+  })
+  createAt!: Date
+
+  @UpdateDateColumn({
+    name: 'update_at'
+  })
+  updateAt!: Date
+
   @OneToOne(() => User, (user) => user.customer)
   @JoinColumn({
     name: 'user_id',
@@ -64,4 +91,7 @@ export default class Customer extends BaseEntity {
 
   @OneToMany(() => Favorite, (favorite) => favorite.customer)
   favoriteList!: Favorite[]
+
+  @OneToMany(() => AnthroMeasure, (anthroMeasure) => anthroMeasure.customer)
+  anthroMeasureList!: AnthroMeasure[]
 }

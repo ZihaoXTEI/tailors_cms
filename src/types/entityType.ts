@@ -1,6 +1,7 @@
 export enum Gender {
   MALE = '男',
-  FEMALE = '女'
+  FEMALE = '女',
+  BOTH = '中性'
 }
 
 export enum Status {
@@ -24,7 +25,7 @@ export enum PaymentMethod {
   OTHER = 5
 }
 
-export enum MenuType {
+export enum ClientType {
   CMS = 0,
   SHOP = 1,
   MINIPROGRAM = 2

@@ -14,6 +14,7 @@ import Customer from './Customer'
 import ClothType from './ClothType'
 import OrderFabric from './OrderFabric'
 import OrderProcess from './OrderProcess'
+import AnthroMeasure from './AnthroMeasure'
 
 @Entity('order_tb')
 export default class Order {
@@ -91,8 +92,8 @@ export default class Order {
 
   @ManyToOne(() => Customer, (customer) => customer.orderList)
   @JoinColumn({
-    name: 'customer_id',
-    referencedColumnName: 'id'
+    name: 'customer_id'
+    // referencedColumnName: 'userId'
   })
   customer!: Customer
 
@@ -109,5 +110,10 @@ export default class Order {
   @OneToOne(() => OrderProcess, (orderProcess) => orderProcess.order)
   orderProcess!: OrderProcess
 
-  // anthr_id
+  @ManyToOne(() => AnthroMeasure, (anthroMeasure) => anthroMeasure.orderList)
+  @JoinColumn({
+    name: 'anthroMeasure_id',
+    referencedColumnName: 'id'
+  })
+  anthroMeasure!: AnthroMeasure
 }

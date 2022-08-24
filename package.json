@@ -16,8 +16,10 @@
   "author": "Zihao Li",
   "license": "ISC",
   "dependencies": {
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^18.6.3",
     "dotenv": "^16.0.1",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-router": "^12.0.0",

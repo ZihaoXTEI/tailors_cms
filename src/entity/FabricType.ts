@@ -15,7 +15,7 @@ export default class FabricType extends BaseEntity {
   fabrictypeName!: string
 
   @Column({
-    name: 'fabrictypeRemark',
+    name: 'fabrictype_remark',
     type: 'varchar',
     length: 64,
     comment: '布料说明'

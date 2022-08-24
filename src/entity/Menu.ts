@@ -1,4 +1,4 @@
-import { Status, MenuType } from '../types/entityType'
+import { Status, ClientType } from '../types/entityType'
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import Permission from './Permission'
@@ -31,11 +31,11 @@ export default class Menu extends BaseEntity {
   @Column({
     name: 'menu_type',
     type: 'enum',
-    enum: MenuType,
-    default: MenuType.CMS,
+    enum: ClientType,
+    default: ClientType.CMS,
     comment: '菜单类型'
   })
-  menuType!: MenuType
+  menuType!: ClientType
 
   @Column({
     name: 'menu_level',

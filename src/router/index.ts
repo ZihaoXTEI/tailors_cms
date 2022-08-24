@@ -1,5 +1,5 @@
 import Koa from 'koa'
-import userRouter from './user.router'
+import userRouter from './user/user.router'
 import authRouter from './auth.router'
 
 // export const useRoutes = (app: Koa) => {

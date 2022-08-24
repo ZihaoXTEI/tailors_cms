@@ -1,4 +1,4 @@
-import { Season, Status } from '../types/entityType'
+import { Gender, Season, Status } from '../types/entityType'
 import { Column, Entity, OneToMany } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import Order from './Order'
@@ -31,6 +31,15 @@ export default class ClothType extends BaseEntity {
     comment: '服装适合季节'
   })
   clothtypeSeason!: Season
+
+  @Column({
+    name: 'clothtype_gender',
+    type: 'enum',
+    enum: Gender,
+    default: Gender.BOTH,
+    comment: '服装适合性别'
+  })
+  clothtypeGender!: Gender
 
   @Column({
     type: 'enum',
