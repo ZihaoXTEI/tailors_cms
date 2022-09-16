@@ -28,7 +28,13 @@ export default class FabricInventory extends BaseEntity {
   })
   preVolume!: number
 
-  // fabric_id
+  @Column({
+    name: 'fabric_id',
+    type: 'varchar',
+    length: 36
+  })
+  fabricId!: string
+
   @OneToOne(() => Fabric)
   @JoinColumn({
     name: 'fabric_id',

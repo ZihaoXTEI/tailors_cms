@@ -4,7 +4,9 @@ node_modules
 .idea
 OOAD
 .husky
+key
 *.key
+.env
 
 
 # local env files

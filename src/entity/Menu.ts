@@ -1,10 +1,25 @@
 import { Status, ClientType } from '../types/entityType'
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
-import BaseEntity from './BaseEntity'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
+  UpdateDateColumn
+} from 'typeorm'
 import Permission from './Permission'
 
 @Entity('menu_tb')
-export default class Menu extends BaseEntity {
+@Tree('materialized-path')
+export default class Menu {
+  @PrimaryGeneratedColumn()
+  id!: number
+
   @Column({
     name: 'menu_name',
     type: 'varchar',
@@ -16,6 +31,7 @@ export default class Menu extends BaseEntity {
   @Column({
     type: 'varchar',
     length: '64',
+    nullable: true,
     comment: '菜单路径'
   })
   url!: string
@@ -58,17 +74,37 @@ export default class Menu extends BaseEntity {
   })
   status!: Status
 
+  @CreateDateColumn({
+    name: 'create_at',
+    comment: '创建时间'
+  })
+  createAt!: Date
+
+  @UpdateDateColumn({
+    name: 'update_at',
+    comment: '更新时间'
+  })
+  updateAt!: Date
+
   @OneToMany(() => Permission, (permission) => permission.menu)
   permissionList!: Permission[]
 
-  // parent_id
+  @Column({
+    name: 'parent_id',
+    type: 'number',
+    nullable: true
+  })
+  parentId!: number
+
   @ManyToOne((type) => Menu, (menu) => menu.childMenuList)
   @JoinColumn({
     name: 'parent_id',
     referencedColumnName: 'id'
   })
+  @TreeParent()
   parentMenu: Menu | undefined
 
   @OneToMany(() => Menu, (menu) => menu.parentMenu)
+  @TreeChildren()
   childMenuList!: Menu[]
 }

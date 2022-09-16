@@ -1,6 +1,6 @@
 import { Context, Next } from 'koa'
 import jwt from 'jsonwebtoken'
-import userService from '../service/user.service'
+import userService from '../service/user/user.service'
 import { PUBLIC_KEY } from '../app/config'
 import ErrorType from '../constant/errorType'
 import { md5Password } from '../utils/encryption'
@@ -19,8 +19,13 @@ const verifyLogin = async (ctx: Context, next: Next) => {
   }
 
   // 判断用户是否存在
-  const result = await userService.getUserByName(username)
-  console.log(result)
+  let result = null
+  try {
+    result = await userService.getUserByName(username)
+    console.log(result)
+  } catch (err) {
+    console.log(err)
+  }
   if (!result) {
     // const error = new Error('不存在该用户')
     const error = new ErrorObject('不存在该用户', ErrorType.BAD_REQUEST)
@@ -46,6 +51,8 @@ const verifyLogin = async (ctx: Context, next: Next) => {
 const verifyAuth = async (ctx: Context, next: Next) => {
   // 获取 token
   const authorization = ctx.header.authorization
+
+  // console.log('auth', authorization)
   if (!authorization) {
     // 没有token
     // const error = new Error('无效 token')
@@ -76,4 +83,11 @@ const verifyPermission = async (ctx: Context, next: Next) => {
   await next()
 }
 
-export { verifyLogin, verifyAuth }
+const setTokenToHeader = async (ctx: Context, next: Next) => {
+  const { token = '' } = ctx.request.body
+  console.log(ctx.request.body)
+  ctx.header.authorization = token
+  await next()
+}
+
+export { verifyLogin, verifyAuth, setTokenToHeader, verifyPermission }

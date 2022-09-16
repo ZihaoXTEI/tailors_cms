@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 import { Context } from 'koa'
 import { PRIVATE_KEY } from '../app/config'
+import SuccessType from '../constant/successType'
+import SuccessObject from '../utils/successObject'
 
 class AuthController {
   login(ctx: Context) {
@@ -11,12 +13,14 @@ class AuthController {
       algorithm: 'RS256'
     })
 
-    console.log(token)
+    // console.log(token)
 
-    ctx.body = { token }
+    const data = new SuccessObject(SuccessType.OK, '登录成功', { userId: id, token })
+    ctx.body = data
   }
 
   success(ctx: Context) {
+    console.log(ctx.user)
     ctx.body = ctx.user
   }
 }

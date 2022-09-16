@@ -28,12 +28,26 @@ export default class FabricInbound extends BaseEntity {
   })
   inboundDate!: Date
 
+  @Column({
+    name: 'fabric_id',
+    type: 'varchar',
+    length: 36
+  })
+  fabricId!: string
+
   @ManyToOne(() => Fabric, (fabric) => fabric.fabricInboundList)
   @JoinColumn({
     name: 'fabric_id',
     referencedColumnName: 'id'
   })
   fabric!: Fabric
+
+  @Column({
+    name: 'supplier_id',
+    type: 'varchar',
+    length: 36
+  })
+  supplierId!: string
 
   @ManyToOne(() => Supplier, (supplier) => supplier.fabricInboundList)
   @JoinColumn({

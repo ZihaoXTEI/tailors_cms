@@ -1,11 +1,11 @@
-import User from '../entity/User'
-import { AppDataSource } from '../app/database'
-import Staff from '../entity/Staff'
-import Customer from '../entity/Customer'
+import User from '../../entity/User'
+import { AppDataSource } from '../../app/database'
+import Staff from '../../entity/Staff'
+import Customer from '../../entity/Customer'
 
 class UserService {
   private userRepository = AppDataSource.getRepository(User)
-  private staffRepository = AppDataSource.getRepository(Staff)
+  private readonly tableName = 'user_tb'
 
   // 创建用户信息
   async createUser(user: User, role: Staff | Customer) {
@@ -39,6 +39,23 @@ class UserService {
       // 释放 queryRunner
       await queryRunner.release()
     }
+  }
+
+  // 根据ID获取用户
+  async getUserById(id: string) {
+    // const result = await this.userRepository.findOne({
+    //   where: { id }
+    // })
+    // return result
+
+    const result = await this.userRepository
+      .createQueryBuilder(this.tableName)
+      .leftJoinAndSelect(`${this.tableName}.staff`, 'staff_tb')
+      .leftJoinAndSelect(`${this.tableName}.customer`, 'customer_tb')
+      .where(`${this.tableName}.id = :id`, { id })
+      .getOne()
+
+    return result
   }
 
   // 根据用户名获取用户

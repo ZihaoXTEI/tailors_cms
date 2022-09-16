@@ -6,6 +6,13 @@ import Order from './Order'
 // Anthropometric Measurements
 @Entity('anthromeasure_tb')
 export default class AnthroMeasure extends BaseEntity {
+  @Column({
+    name: 'customer_id',
+    type: 'varchar',
+    length: 36
+  })
+  customerId!: string
+
   @ManyToOne(() => Customer, (customer) => customer.anthroMeasureList)
   @JoinColumn({
     name: 'customer_id'

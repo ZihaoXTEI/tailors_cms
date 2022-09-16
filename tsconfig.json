@@ -23,7 +23,8 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    "src/constant/sqlErrorType"
   ],
   "exclude": [
     "node_modules"

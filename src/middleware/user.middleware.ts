@@ -3,7 +3,7 @@ import { Context, Next } from 'koa'
 import ErrorType from '../constant/errorType'
 import ErrorObject from '../utils/errorObject'
 import { md5Password } from '../utils/encryption'
-import userService from '../service/user.service'
+import userService from '../service/user/user.service'
 
 // 验证用户名和密码信息合法
 const verifyUser = async (ctx: Context, next: Next) => {

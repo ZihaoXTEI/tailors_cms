@@ -72,6 +72,13 @@ export default class OrderProcess extends BaseEntity {
   })
   finishDate!: Date | undefined
 
+  @Column({
+    name: 'order_id',
+    type: 'varchar',
+    length: 40
+  })
+  orderId!: string
+
   @OneToOne(() => Order, (order) => order.orderProcess)
   @JoinColumn({
     name: 'order_id',

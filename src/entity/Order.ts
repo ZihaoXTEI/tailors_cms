@@ -20,7 +20,7 @@ import AnthroMeasure from './AnthroMeasure'
 export default class Order {
   @PrimaryColumn({
     type: 'varchar',
-    length: '32'
+    length: '40'
   })
   id!: string
 
@@ -81,28 +81,43 @@ export default class Order {
   deadline!: Date
 
   @CreateDateColumn({
-    name: 'create_at'
+    name: 'create_at',
+    comment: '创建时间'
   })
   createAt!: Date
 
   @UpdateDateColumn({
-    name: 'update_at'
+    name: 'update_at',
+    comment: '更新时间'
   })
   updateAt!: Date
+
+  @Column({
+    name: 'customer_id',
+    type: 'varchar',
+    length: 36
+  })
+  customerId!: string
 
   @ManyToOne(() => Customer, (customer) => customer.orderList)
   @JoinColumn({
     name: 'customer_id'
-    // referencedColumnName: 'userId'
   })
   customer!: Customer
 
-  @ManyToOne(() => ClothType, (clothtype) => clothtype.orderList)
+  @Column({
+    name: 'clothtype_id',
+    type: 'varchar',
+    length: 36
+  })
+  clothTypeId!: string
+
+  @ManyToOne(() => ClothType, (clothType) => clothType.orderList)
   @JoinColumn({
     name: 'clothtype_id',
     referencedColumnName: 'id'
   })
-  clothtype!: ClothType
+  clothType!: ClothType
 
   @OneToMany(() => OrderFabric, (orderFabirc) => orderFabirc.order)
   orderFabricList!: OrderFabric[]
@@ -110,9 +125,16 @@ export default class Order {
   @OneToOne(() => OrderProcess, (orderProcess) => orderProcess.order)
   orderProcess!: OrderProcess
 
+  @Column({
+    name: 'anthromeasure_id',
+    type: 'varchar',
+    length: 36
+  })
+  anthroMeasureId!: string
+
   @ManyToOne(() => AnthroMeasure, (anthroMeasure) => anthroMeasure.orderList)
   @JoinColumn({
-    name: 'anthroMeasure_id',
+    name: 'anthromeasure_id',
     referencedColumnName: 'id'
   })
   anthroMeasure!: AnthroMeasure

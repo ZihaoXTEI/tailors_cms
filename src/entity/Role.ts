@@ -1,11 +1,21 @@
 import { Status } from '../types/entityType'
-import { Column, Entity, JoinTable, ManyToMany } from 'typeorm'
-import BaseEntity from './BaseEntity'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm'
 import Permission from './Permission'
 import User from './User'
 
 @Entity('role_tb')
-export default class Role extends BaseEntity {
+export default class Role {
+  @PrimaryGeneratedColumn()
+  id!: number
+
   @Column({
     name: 'role_name',
     type: 'varchar',
@@ -32,9 +42,31 @@ export default class Role extends BaseEntity {
   })
   status!: Status
 
+  @CreateDateColumn({
+    name: 'create_at',
+    comment: '创建时间'
+  })
+  createAt!: Date
+
+  @UpdateDateColumn({
+    name: 'update_at',
+    comment: '更新时间'
+  })
+  updateAt!: Date
+
   @ManyToMany(() => User, (user) => user.roleList)
   @JoinTable({
-    name: 'user_role_tb'
+    name: 'user_role_tb',
+    joinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_user_role_tb_role_id'
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_user_role_tb_user_id'
+    }
   })
   userList!: User[]
 

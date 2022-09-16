@@ -27,6 +27,7 @@ export const errorHandler = (error: ErrorObject, ctx: Context) => {
   ctx.body = {
     status,
     statusText: error.status,
-    message: error.errMsg
+    message: error.errMsg,
+    errorData: error?.errData
   }
 }

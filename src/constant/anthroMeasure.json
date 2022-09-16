@@ -1,0 +1,86 @@
+{
+  "height": {
+    "tableName": "height",
+    "chineseName": "身高"
+  },
+
+  "shirtLength": {
+    "tableName": "shirt_length",
+    "chineseName": "衫长"
+  },
+
+  "bust": {
+    "tableName": "bust",
+    "chineseName": "胸围"
+  },
+
+  "shoulderWidth": {
+    "tableName": "shoulder_width",
+    "chineseName": "肩宽"
+  },
+
+  "sleeveLength": {
+    "tableName": "sleeve_length",
+    "chineseName": "袖长"
+  },
+
+  "cuff": {
+    "tableName": "cuff",
+    "chineseName": "袖口"
+  },
+
+  "neckWidth": {
+    "tableName": "neck_width",
+    "chineseName": "领围"
+  },
+
+  "chestWidth": {
+    "tableName": "chest_width",
+    "chineseName": "胸宽"
+  },
+
+  "backWidth": {
+    "tableName": "back_width",
+    "chineseName": "背宽"
+  },
+
+  "middleWaistline": {
+    "tableName": "middle_waistline",
+    "chineseName": "中腰围"
+  },
+
+  "anteriorWaistLength": {
+    "tableName": "anterior_waist_length",
+    "chineseName": "前腰长"
+  },
+
+  "backWaistLength": {
+    "tableName": "back_waist_length",
+    "chineseName": "后腰长"
+  },
+
+  "outseam": {
+    "tableName": "outseam",
+    "chineseName": "裤长"
+  },
+
+  "hipline": {
+    "tableName": "hipline",
+    "chineseName": "臀围"
+  },
+
+  "waistline": {
+    "tableName": "waistline",
+    "chineseName": "腰围"
+  },
+
+  "legWidth": {
+    "tableName": "leg_width",
+    "chineseName": "裤脚"
+  },
+
+  "skirtLength": {
+    "tableName": "skirt_length",
+    "chineseName": "裙长"
+  }
+}

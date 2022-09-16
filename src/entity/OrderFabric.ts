@@ -19,12 +19,26 @@ export default class OrderFabric extends BaseEntity {
   })
   ordfabUsage!: number
 
+  @Column({
+    name: 'order_id',
+    type: 'varchar',
+    length: 40
+  })
+  orderId!: string
+
   @ManyToOne(() => Order, (order) => order.orderFabricList)
   @JoinColumn({
     name: 'order_id',
     referencedColumnName: 'id'
   })
   order!: Order
+
+  @Column({
+    name: 'fabric_id',
+    type: 'varchar',
+    length: 36
+  })
+  fabricId!: string
 
   @ManyToOne(() => Fabric, (fabric) => fabric.orderFabricList)
   @JoinColumn({

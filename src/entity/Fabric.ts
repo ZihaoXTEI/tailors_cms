@@ -1,4 +1,4 @@
-import { Gender, Season, Status } from '../types/entityType'
+import { FabricWidth, Gender, Season, Status } from '../types/entityType'
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import FabricInbound from './FabricInbound'
@@ -19,10 +19,11 @@ export default class Fabric extends BaseEntity {
 
   @Column({
     name: 'fabric_width',
-    type: 'double',
+    type: 'enum',
+    enum: FabricWidth,
     comment: '布料幅宽'
   })
-  fabricWidth!: number
+  fabricWidth!: FabricWidth
 
   @Column({
     name: 'fabric_price',
@@ -75,6 +76,13 @@ export default class Fabric extends BaseEntity {
     comment: '布料状态'
   })
   status!: Status
+
+  @Column({
+    name: 'fabrictype_id',
+    type: 'varchar',
+    length: 36
+  })
+  fabricTypeId!: string
 
   @ManyToOne(() => FabricType, (fabricType) => fabricType.fabricList)
   @JoinColumn({

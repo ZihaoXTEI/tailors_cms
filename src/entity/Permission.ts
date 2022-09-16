@@ -1,11 +1,24 @@
 import { Status } from '../types/entityType'
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
-import BaseEntity from './BaseEntity'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm'
 import Menu from './Menu'
 import Role from './Role'
 
 @Entity('permission_tb')
-export default class Permission extends BaseEntity {
+export default class Permission {
+  @PrimaryGeneratedColumn()
+  id!: number
+
   @Column({
     name: 'permission_name',
     type: 'varchar',
@@ -32,12 +45,35 @@ export default class Permission extends BaseEntity {
   permissionRemark: string | undefined
 
   @Column({
+    name: 'parent_id',
+    type: 'int',
+    nullable: true
+  })
+  parentId!: number
+
+  @ManyToOne((type) => Permission, (permission) => permission.childPermissionList)
+  @JoinColumn({
+    name: 'parent_id',
+    referencedColumnName: 'id'
+  })
+  parentPermission!: Permission
+
+  @OneToMany(() => Permission, (permission) => permission.parentPermission)
+  childPermissionList!: Permission[]
+
+  @Column({
     type: 'enum',
     enum: Status,
     default: Status.NORMAL,
     comment: '状态'
   })
   status!: Status
+
+  @Column({
+    name: 'menu_id',
+    type: 'int'
+  })
+  menuId!: number
 
   @ManyToOne(() => Menu, (menu) => menu.permissionList)
   @JoinColumn({
@@ -46,9 +82,31 @@ export default class Permission extends BaseEntity {
   })
   menu: Menu | undefined
 
+  @CreateDateColumn({
+    name: 'create_at',
+    comment: '创建时间'
+  })
+  createAt!: Date
+
+  @UpdateDateColumn({
+    name: 'update_at',
+    comment: '更新时间'
+  })
+  updateAt!: Date
+
   @ManyToMany(() => Role, (role) => role.permissionList)
   @JoinTable({
-    name: 'role_permission_tb'
+    name: 'role_permission_tb',
+    joinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_permission_role_tb_permission_id'
+    },
+    inverseJoinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id',
+      foreignKeyConstraintName: 'fk_permission_role_tb_roler_id'
+    }
   })
   roleList!: Role[]
 }

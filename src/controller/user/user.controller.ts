@@ -1,15 +1,19 @@
 import { Context } from 'koa'
-import userService from '../../service/user.service'
+import userService from '../../service/user/user.service'
 import User from '../../entity/User'
 import { ClientType } from '../../types/entityType'
 import Staff from '../../entity/Staff'
 import ErrorObject from '../../utils/errorObject'
 import ErrorType from '../../constant/errorType'
 import Customer from '../../entity/Customer'
+import SuccessObject from '../../utils/successObject'
+import SuccessType from '../../constant/successType'
 
 class UserController {
+  private chineseName = '用户'
+
   // 创建用户
-  async createUser(ctx: Context) {
+  createUser = async (ctx: Context) => {
     const requestBody = ctx.request.body
     const clientType = requestBody.clientType
 
@@ -55,6 +59,31 @@ class UserController {
     }
 
     ctx.body = result
+  }
+
+  getUserInfo = async (ctx: Context) => {
+    const { userId } = ctx.params
+    console.log(userId)
+
+    try {
+      const result = await userService.getUserById(userId)
+      console.log(result)
+      if (result) {
+        result.password = ''
+        const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
+        ctx.body = data
+      } else {
+        const error = new ErrorObject(`获取${this.chineseName}数据为空`, ErrorType.BAD_REQUEST)
+        return ctx.app.emit('error', error, ctx)
+      }
+    } catch (err) {
+      console.log(err)
+      const error = new ErrorObject(
+        `获取${this.chineseName}数据错误`,
+        ErrorType.INTERNAL_SERVER_ERROR
+      )
+      return ctx.app.emit('error', error, ctx)
+    }
   }
 }
 

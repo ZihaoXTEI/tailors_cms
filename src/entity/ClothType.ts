@@ -1,7 +1,8 @@
 import { Gender, Season, Status } from '../types/entityType'
-import { Column, Entity, OneToMany } from 'typeorm'
+import { Column, Entity, OneToMany, OneToOne } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import Order from './Order'
+import ClothTypeConsumption from './ClothTypeConsumption'
 
 @Entity('clothtype_tb')
 export default class ClothType extends BaseEntity {
@@ -49,6 +50,138 @@ export default class ClothType extends BaseEntity {
   })
   status!: Status
 
-  @OneToMany(() => Order, (order) => order.customer)
+  // 需要测量人体部位
+  @Column({
+    name: 'shirt_length',
+    type: 'boolean',
+    default: false,
+    comment: '衫长'
+  })
+  shirtLength!: boolean
+
+  @Column({
+    name: 'bust',
+    type: 'boolean',
+    default: false,
+    comment: '胸围'
+  })
+  bust!: boolean
+
+  @Column({
+    name: 'shoulder_width',
+    type: 'boolean',
+    default: false,
+    comment: '肩宽'
+  })
+  shoulderWidth!: boolean
+
+  @Column({
+    name: 'sleeve_length',
+    type: 'boolean',
+    default: false,
+    comment: '袖长'
+  })
+  sleeveLength!: boolean
+
+  @Column({
+    name: 'cuff',
+    type: 'boolean',
+    default: false,
+    comment: '袖口'
+  })
+  cuff!: boolean
+
+  @Column({
+    name: 'neck_width',
+    type: 'boolean',
+    default: false,
+    comment: '领围'
+  })
+  neckWidth!: boolean
+
+  @Column({
+    name: 'chest_width',
+    type: 'boolean',
+    default: false,
+    comment: '胸宽'
+  })
+  chestWidth!: boolean
+
+  @Column({
+    name: 'back_width',
+    type: 'boolean',
+    default: false,
+    comment: '背宽'
+  })
+  backWidth!: boolean
+
+  @Column({
+    name: 'middle_waistline',
+    type: 'boolean',
+    default: false,
+    comment: '中腰围'
+  })
+  middleWaistline!: boolean
+
+  @Column({
+    name: 'anterior_waist_length',
+    type: 'boolean',
+    default: false,
+    comment: '前腰长'
+  })
+  anteriorWaistLength!: boolean
+
+  @Column({
+    name: 'back_waist_length',
+    type: 'boolean',
+    default: false,
+    comment: '后腰长'
+  })
+  backWaistLength!: boolean
+
+  @Column({
+    name: 'outseam',
+    type: 'boolean',
+    default: false,
+    comment: '裤长'
+  })
+  outseam!: boolean
+
+  @Column({
+    name: 'hipline',
+    type: 'boolean',
+    default: false,
+    comment: '臀围'
+  })
+  hipline!: boolean
+
+  @Column({
+    name: 'waistline',
+    type: 'boolean',
+    default: false,
+    comment: '腰围'
+  })
+  waistline!: boolean
+
+  @Column({
+    name: 'leg_width',
+    type: 'boolean',
+    default: false,
+    comment: '裤脚'
+  })
+  legWidth!: boolean
+
+  @Column({
+    name: 'skirt_length',
+    type: 'boolean',
+    default: false,
+    comment: '裙长'
+  })
+  skirtLength!: boolean
+
+  @OneToMany(() => Order, (order) => order.clothType)
   orderList!: Order[]
+
+  @OneToOne(() => ClothTypeConsumption, (clothTypeConsumption) => clothTypeConsumption.clothType)
+  clothTypeConsumption!: ClothTypeConsumption
 }
