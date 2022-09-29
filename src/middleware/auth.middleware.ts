@@ -7,10 +7,10 @@ import { md5Password } from '../utils/encryption'
 import ErrorObject from '../utils/errorObject'
 
 const verifyLogin = async (ctx: Context, next: Next) => {
-  const { username, password } = ctx.request.body
+  const { nickname, password } = ctx.request.body
 
   // 判断用户名和密码是否为空
-  if (!username || !password) {
+  if (!nickname || !password) {
     console.log('用户名或密码为空')
     // const error = new Error('用户名或密码为空')
     const error = new ErrorObject('用户名或密码为空', ErrorType.BAD_REQUEST)
@@ -21,7 +21,7 @@ const verifyLogin = async (ctx: Context, next: Next) => {
   // 判断用户是否存在
   let result = null
   try {
-    result = await userService.getUserByName(username)
+    result = await userService.getUserByName(nickname)
     console.log(result)
   } catch (err) {
     console.log(err)

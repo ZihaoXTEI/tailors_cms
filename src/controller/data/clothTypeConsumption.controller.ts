@@ -3,6 +3,7 @@ import ErrorType from '../../constant/errorType'
 import SuccessType from '../../constant/successType'
 import ClothTypeConsumptionService from '../../service/data/clothTypeConsumption.service'
 import ErrorObject from '../../utils/errorObject'
+import { objectArrayFlat } from '../../utils/objectUtil'
 import SuccessObject from '../../utils/successObject'
 
 class ClothTypeConsumptionController {
@@ -13,16 +14,13 @@ class ClothTypeConsumptionController {
     const { body } = ctx.request
 
     try {
-      await this.clothTypeConsumptionService.insert(body)
+      await this.clothTypeConsumptionService.insertClothTypeConsumption(body)
       const data = new SuccessObject(SuccessType.CREATED, `添加${this.chineseName}数据成功`)
       ctx.status = SuccessType.CREATED
       ctx.body = data
     } catch (err) {
       console.log('[ERROR]', (err as any).code)
-      const error = new ErrorObject(
-        `添加${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`添加${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -32,14 +30,11 @@ class ClothTypeConsumptionController {
     console.log(clothTypeConsumptionId)
 
     try {
-      await this.clothTypeConsumptionService.delete(clothTypeConsumptionId)
+      await this.clothTypeConsumptionService.deleteClothTypeConsumption(clothTypeConsumptionId)
       const data = new SuccessObject(SuccessType.OK, `删除${this.chineseName}数据成功`)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `删除${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`删除${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -49,14 +44,11 @@ class ClothTypeConsumptionController {
     const { body } = ctx.request
 
     try {
-      await this.clothTypeConsumptionService.update(clothTypeConsumptionId, body)
+      await this.clothTypeConsumptionService.updateClothTypeConsumption(clothTypeConsumptionId, body)
       const data = new SuccessObject(SuccessType.CREATED, `更新${this.chineseName}数据成功`)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `更新${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`更新${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -65,14 +57,11 @@ class ClothTypeConsumptionController {
     const { clothTypeConsumptionId } = ctx.params
 
     try {
-      const result = await this.clothTypeConsumptionService.getById(clothTypeConsumptionId)
+      const result = await this.clothTypeConsumptionService.getClothTypeConsumptionById(clothTypeConsumptionId)
       const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `获取${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -81,15 +70,17 @@ class ClothTypeConsumptionController {
     const { skip, take } = ctx.request.body
 
     try {
-      const result = await this.clothTypeConsumptionService.getList(skip, take)
-      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
+      const result = await this.clothTypeConsumptionService.getClothTypeConsumptionList(skip, take, ctx.request.body)
+
+      const processedData = objectArrayFlat(result.list, 'clothType', ['clothtypeName', 'id'])
+      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, {
+        list: processedData,
+        total: result.total
+      })
       ctx.body = data
     } catch (err) {
       console.log(err)
-      const error = new ErrorObject(
-        `获取${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }

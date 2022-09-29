@@ -12,6 +12,9 @@ import menuRouter from './system/menu.route'
 import roleRouter from './system/role.router'
 import permissionRouter from './system/permission.router'
 
+import staffRouter from './user/staff.router'
+import customerRouter from './user/customer.router'
+
 // export const useRoutes = (app: Koa) => {
 //   fs.readdirSync(__dirname).forEach(async (file) => {
 //     if (file === 'index.ts') return
@@ -50,4 +53,9 @@ export const useRoutes = (app: Koa) => {
   app.use(roleRouter.allowedMethods())
   app.use(permissionRouter.routes())
   app.use(permissionRouter.allowedMethods())
+
+  app.use(staffRouter.routes())
+  app.use(staffRouter.allowedMethods())
+  app.use(customerRouter.routes())
+  app.use(customerRouter.allowedMethods())
 }

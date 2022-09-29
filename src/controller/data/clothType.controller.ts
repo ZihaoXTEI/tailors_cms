@@ -16,6 +16,7 @@ class ClothTypeController {
       ctx.body = data
     } catch (err) {
       console.log('[ERROR]', (err as any).code)
+      console.log(err)
       const error = new ErrorObject('添加服装类型数据错误', ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
@@ -65,11 +66,14 @@ class ClothTypeController {
   async getClothTypeList(ctx: Context) {
     const { skip, take } = ctx.request.body
 
+    console.log(ctx.request.body)
+
     try {
-      const result = await clothTypeService.getClothTypeList(skip, take)
+      const result = await clothTypeService.getClothTypeList(skip, take, ctx.request.body)
       const data = new SuccessObject(SuccessType.OK, '获取数据成功', result)
       ctx.body = data
-    } catch {
+    } catch (err) {
+      console.log(err)
       const error = new ErrorObject('获取服装类型数据错误', ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }

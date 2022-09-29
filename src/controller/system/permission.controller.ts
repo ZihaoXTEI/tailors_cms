@@ -1,7 +1,7 @@
 import { Context } from 'koa'
 import ErrorType from '../../constant/errorType'
 import SuccessType from '../../constant/successType'
-import { convertPermission } from '../../router/system/convertToTreeStructure'
+import { convertPermission } from '../../utils/convertToTreeStructure'
 import PermissionService from '../../service/system/permission.service'
 import ErrorObject from '../../utils/errorObject'
 import SuccessObject from '../../utils/successObject'

@@ -5,39 +5,48 @@ class ClothTypeConsumptionService {
   private repository = AppDataSource.getRepository(ClothTypeConsumption)
   private readonly tableName = 'clothtype_consumption_tb'
 
-  async insert(bodyData: any) {
+  async insertClothTypeConsumption(bodyData: any) {
     const entity = this.repository.create(bodyData)
     const result = await this.repository.insert(entity)
     return result
   }
 
-  async delete(id: string) {
+  async deleteClothTypeConsumption(id: string) {
     const result = await this.repository.delete(id)
     return result
   }
 
-  async update(id: string, bodyData: any) {
+  async updateClothTypeConsumption(id: string, bodyData: any) {
     bodyData.id = id
     const entity = this.repository.create(bodyData)
     const result = await this.repository.save(entity)
     return result
   }
 
-  async getById(id: string) {
+  async getClothTypeConsumptionById(id: string) {
     const result = await this.repository.findOneBy({ id })
     return result
   }
 
-  async getList(skip = 0, take = 10) {
-    const listPromise = this.repository
+  async getClothTypeConsumptionList(skip = 0, take = 10, queryInfo: any = {}) {
+    const { id = '', clothtypeName = '', fabricWidth = '' } = queryInfo
+    const clothTypeConsumptionListQuery = this.repository
       .createQueryBuilder(this.tableName)
       .leftJoinAndSelect(`${this.tableName}.clothType`, 'clothtype_tb')
-      .skip(skip)
-      .take(take)
-      .getMany()
-    const totalPromise = this.repository.count()
+      .where(`${this.tableName}.id LIKE :id`, { id: `%${id}%` })
+      .andWhere('clothtype_tb.clothtype_Name LIKE :clothtypeName', { clothtypeName: `%${clothtypeName}%` })
 
-    const [list, total] = await Promise.all([listPromise, totalPromise])
+    if (fabricWidth !== '') {
+      clothTypeConsumptionListQuery.andWhere(`${this.tableName}.fabric_width = :fabricWidth`, {
+        fabricWidth: `${fabricWidth}`
+      })
+    }
+
+    const clothTypeConsumptionList = clothTypeConsumptionListQuery.skip(skip).take(take).getMany()
+
+    const clothTypeConsumptionTotal = clothTypeConsumptionListQuery.getCount()
+
+    const [list, total] = await Promise.all([clothTypeConsumptionList, clothTypeConsumptionTotal])
 
     return { list, total }
   }

@@ -20,10 +20,7 @@ class SupplierController {
       ctx.body = data
     } catch (err) {
       console.log(err)
-      const error = new ErrorObject(
-        `添加${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`添加${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -37,10 +34,7 @@ class SupplierController {
       const data = new SuccessObject(SuccessType.OK, `删除${this.chineseName}数据成功`)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `删除${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`删除${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -54,10 +48,7 @@ class SupplierController {
       const data = new SuccessObject(SuccessType.CREATED, `更新${this.chineseName}数据成功`)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `更新${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`更新${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -70,10 +61,7 @@ class SupplierController {
       const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `获取${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -87,10 +75,7 @@ class SupplierController {
       ctx.body = data
     } catch (err) {
       console.log(err)
-      const error = new ErrorObject(
-        `获取${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }

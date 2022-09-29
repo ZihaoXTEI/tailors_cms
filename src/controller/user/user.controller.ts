@@ -15,10 +15,14 @@ class UserController {
   // 创建用户
   createUser = async (ctx: Context) => {
     const requestBody = ctx.request.body
-    const clientType = requestBody.clientType
+    const { clientType } = ctx.params
+
+    console.log('clientType', clientType == ClientType.CMS)
+    console.log(typeof clientType)
+    console.log(typeof ClientType.CMS)
 
     const user = new User()
-    user.nickname = requestBody.username
+    user.nickname = requestBody.nickname
     user.password = requestBody.password
 
     let result = null
@@ -26,29 +30,29 @@ class UserController {
     // 需要同时为该角色赋予角色
 
     // 根据角色创建 顾客表/员工表
-    if (clientType === ClientType.CMS) {
+    if (clientType == ClientType.CMS) {
+      console.log(requestBody)
       const staff = new Staff()
-      const { staffInfo } = requestBody
-      staff.staffName = staffInfo.staffName
-      staff.staffGender = staffInfo.staffGender
-      staff.staffSalary = staffInfo.staffSalary
-      staff.staffEntrydate = staffInfo.staffEntrydate
-      staff.staffPhone = staffInfo.staffPhone
-      staff.staffAddress = staffInfo.staffAddress
+      staff.staffName = requestBody.staffName
+      staff.staffGender = requestBody.staffGender
+      staff.staffSalary = requestBody.staffSalary ?? 0
+      staff.staffEntrydate = requestBody.staffEntrydate ?? new Date()
+      staff.staffPhone = requestBody.staffPhone ?? ''
+      staff.staffAddress = requestBody.staffAddress ?? ''
 
       try {
         result = await userService.createStaff(user, staff)
-      } catch {
+      } catch (err) {
+        console.log(err)
         const error = new ErrorObject('服务器错误，请联系管理员', ErrorType.INTERNAL_SERVER_ERROR)
         return ctx.app.emit('error', error, ctx)
       }
-    } else if (clientType === ClientType.SHOP) {
+    } else if (clientType == ClientType.SHOP) {
       const customer = new Customer()
-      const { customerInfo } = requestBody
-      customer.customerName = customerInfo.customerName
-      customer.customerGender = customerInfo.customerGender
-      customer.customerPhone = customerInfo.customerPhone
-      customer.customerAddress = customerInfo.customerAddress
+      customer.customerName = requestBody.customerName
+      customer.customerGender = requestBody.customerGender
+      customer.customerPhone = requestBody.customerPhone
+      customer.customerAddress = requestBody.customerAddress
 
       try {
         result = await userService.createCustomer(user, customer)
@@ -61,7 +65,15 @@ class UserController {
     ctx.body = result
   }
 
-  getUserInfo = async (ctx: Context) => {
+  deleteUser = async (ctx: Context) => {
+    const { userId } = ctx.params
+  }
+
+  updateUser = async (ctx: Context) => {
+    const { userId } = ctx.params
+  }
+
+  getUserById = async (ctx: Context) => {
     const { userId } = ctx.params
     console.log(userId)
 
@@ -78,10 +90,7 @@ class UserController {
       }
     } catch (err) {
       console.log(err)
-      const error = new ErrorObject(
-        `获取${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }

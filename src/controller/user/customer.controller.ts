@@ -1,35 +1,36 @@
 import { Context } from 'koa'
 import ErrorType from '../../constant/errorType'
 import SuccessType from '../../constant/successType'
-import FabricTypeService from '../../service/data/fabricType.service'
+import CustomerService from '../../service/user/customer.service'
 
 import ErrorObject from '../../utils/errorObject'
+import { objectArrayFlat, objectFlat } from '../../utils/objectUtil'
 import SuccessObject from '../../utils/successObject'
 
-class FabricTypeController {
-  private fabricTypeService = new FabricTypeService()
-  private chineseName = '布料类型'
+class CustomerController {
+  private customerService = new CustomerService()
+  private chineseName = '顾客'
 
-  createFabricType = async (ctx: Context) => {
+  createCustomer = async (ctx: Context) => {
     const { body } = ctx.request
 
     try {
-      await this.fabricTypeService.insertFabricType(body)
+      await this.customerService.insertCustomer(body)
       const data = new SuccessObject(SuccessType.CREATED, `添加${this.chineseName}数据成功`)
       ctx.status = SuccessType.CREATED
       ctx.body = data
     } catch (err) {
-      console.log('[ERROR]', (err as any).code)
+      console.log('[ERROR]', err)
       const error = new ErrorObject(`添加${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
 
-  deleteFabricType = async (ctx: Context) => {
-    const { fabricTypeId } = ctx.params
+  deleteCustomer = async (ctx: Context) => {
+    const { customerId } = ctx.params
 
     try {
-      await this.fabricTypeService.deleteFabricType(fabricTypeId)
+      await this.customerService.deleteCustomer(customerId)
       const data = new SuccessObject(SuccessType.OK, `删除${this.chineseName}数据成功`)
       ctx.body = data
     } catch {
@@ -38,12 +39,12 @@ class FabricTypeController {
     }
   }
 
-  updateFabricType = async (ctx: Context) => {
-    const { fabricTypeId } = ctx.params
+  updateCustomer = async (ctx: Context) => {
+    const { customerId } = ctx.params
     const { body } = ctx.request
 
     try {
-      await this.fabricTypeService.updateFabricType(fabricTypeId, body)
+      await this.customerService.updateCustomer(customerId, body)
       const data = new SuccessObject(SuccessType.CREATED, `更新${this.chineseName}数据成功`)
       ctx.body = data
     } catch {
@@ -52,12 +53,16 @@ class FabricTypeController {
     }
   }
 
-  getFabricTypeById = async (ctx: Context) => {
-    const { fabricTypeId } = ctx.params
+  getCustomerById = async (ctx: Context) => {
+    const { customerId } = ctx.params
 
     try {
-      const result = await this.fabricTypeService.getFabricTypeById(fabricTypeId)
-      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
+      const result = await this.customerService.getCustomerById(customerId)
+      const processedData = objectFlat(result, 'user', ['nickname', 'password', 'avatar'])
+
+      console.log(processedData)
+
+      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, processedData)
       ctx.body = data
     } catch {
       const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
@@ -65,12 +70,17 @@ class FabricTypeController {
     }
   }
 
-  getFabricTypeList = async (ctx: Context) => {
+  getCustomerList = async (ctx: Context) => {
     const { skip, take } = ctx.request.body
 
     try {
-      const result = await this.fabricTypeService.getFabricTypeList(skip, take, ctx.request.body)
-      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
+      const result = await this.customerService.getCustomerList(skip, take, ctx.request.body)
+      const processedData = objectArrayFlat(result.list, 'user', ['nickname', 'avatar'])
+
+      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, {
+        list: processedData,
+        total: result.total
+      })
       ctx.body = data
     } catch (err) {
       console.log(err)
@@ -80,4 +90,4 @@ class FabricTypeController {
   }
 }
 
-export default FabricTypeController
+export default CustomerController

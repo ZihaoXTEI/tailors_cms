@@ -14,17 +14,12 @@ supplierRouter.post('/', verifyAuth, usingValidation(Supplier), supplierControll
 supplierRouter.delete('/:supplierId', verifyAuth, supplierController.deleteSupplier)
 
 // 修改指定供应商数据
-supplierRouter.put(
-  './:supplierId',
-  verifyAuth,
-  usingValidation(Supplier),
-  supplierController.updateSupplier
-)
+supplierRouter.put('/:supplierId', verifyAuth, usingValidation(Supplier), supplierController.updateSupplier)
 
 // 查找指定供应商数据
 supplierRouter.get('/:supplierId', supplierController.getSupplierById)
 
 // 获取供应商数据列表
-supplierRouter.get('/', supplierController.getSupplierList)
+supplierRouter.post('/list', supplierController.getSupplierList)
 
 export default supplierRouter

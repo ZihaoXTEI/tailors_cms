@@ -2,6 +2,7 @@ import { Status } from '../types/entityType'
 import { Column, Entity, OneToMany } from 'typeorm'
 import Fabric from './Fabric'
 import BaseEntity from './BaseEntity'
+import { Length } from 'class-validator'
 
 @Entity('fabrictype_tb')
 export default class FabricType extends BaseEntity {
@@ -10,17 +11,19 @@ export default class FabricType extends BaseEntity {
     type: 'varchar',
     length: 24,
     unique: true,
-    comment: '布料名称'
+    comment: '布料类型名称'
   })
+  @Length(2, 24, { message: '布料类型名称长度在 2 ~ 24 个字符' })
   fabrictypeName!: string
 
   @Column({
     name: 'fabrictype_remark',
     type: 'varchar',
     length: 64,
-    comment: '布料说明'
+    comment: '布料类型说明'
   })
-  fabrictype_remark: string | undefined
+  @Length(0, 64, { message: '布料类型说明不超过 64 个字符' })
+  fabrictypeRemark: string | undefined
 
   @Column({
     type: 'enum',

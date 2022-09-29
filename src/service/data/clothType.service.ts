@@ -29,17 +29,34 @@ class ClothTypeService {
     return result
   }
 
-  async getClothTypeList(skip = 0, take = 10) {
+  async getClothTypeList(skip = 0, take = 10, queryInfo: any = {}) {
+    const { id = '', clothtypeName = '', clothtypeSeason = '', clothtypeGender = '' } = queryInfo
+
+    console.log(id, clothtypeName, clothtypeSeason, clothtypeGender)
     // take 和 skip 相当于 limit 和 offset
-    const clothTypeList = await this.clothTypeRepository
+    const clothTypeQuery = this.clothTypeRepository
       .createQueryBuilder('clothtype_tb')
-      .skip(skip)
-      .take(take)
-      .getMany()
+      .where('clothtype_tb.id LIKE :id', { id: `%${id}%` })
+      .andWhere('clothtype_tb.clothtype_name LIKE :clothtypeName', { clothtypeName: `%${clothtypeName}%` })
 
-    const clothTypeTotal = await this.clothTypeRepository.count()
+    if (clothtypeSeason !== '') {
+      clothTypeQuery.andWhere('clothtype_tb.clothtype_season = :clothtypeSeason', {
+        clothtypeSeason: `${clothtypeSeason}`
+      })
+    }
 
-    return { list: clothTypeList, total: clothTypeTotal }
+    if (clothtypeGender !== '') {
+      clothTypeQuery.andWhere('clothtype_tb.clothtype_gender = :clothtypeGender', { clothtypeGender })
+    }
+
+    const clothTypeList = clothTypeQuery.skip(skip).take(take).getMany()
+
+    // const clothTypeTotal = this.clothTypeRepository.count()
+    const clothTypeTotal = clothTypeQuery.getCount()
+
+    const [list, total] = await Promise.all([clothTypeList, clothTypeTotal])
+
+    return { list, total }
   }
 }
 

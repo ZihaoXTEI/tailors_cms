@@ -1,5 +1,6 @@
+import { IsEnum, Max, Min } from 'class-validator'
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm'
-import { FabricWidth } from '../types/entityType'
+import { FabricWidth, Status } from '../types/entityType'
 import BaseEntity from './BaseEntity'
 import ClothType from './ClothType'
 
@@ -33,6 +34,7 @@ export default class ClothTypeConsumption extends BaseEntity {
     enum: FabricWidth,
     comment: '布料幅宽'
   })
+  @IsEnum(FabricWidth)
   fabricWidth!: FabricWidth
 
   @Column({
@@ -41,7 +43,17 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '预留值'
   })
+  @Min(0)
+  @Max(1000)
   reservedValue!: number
+
+  @Column({
+    type: 'enum',
+    enum: Status,
+    default: Status.NORMAL,
+    comment: '服装类型用料状态'
+  })
+  status!: Status
 
   @Column({
     name: 'shirt_length',
@@ -49,6 +61,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '衫长'
   })
+  @Min(0)
+  @Max(1000)
   shirtLength!: number
 
   @Column({
@@ -57,6 +71,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '胸围'
   })
+  @Min(0)
+  @Max(1000)
   bust!: number
 
   @Column({
@@ -65,6 +81,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '肩宽'
   })
+  @Min(0)
+  @Max(1000)
   shoulderWidth!: number
 
   @Column({
@@ -73,6 +91,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '袖长'
   })
+  @Min(0)
+  @Max(1000)
   sleeveLength!: number
 
   @Column({
@@ -81,6 +101,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '袖口'
   })
+  @Min(0)
+  @Max(1000)
   cuff!: number
 
   @Column({
@@ -89,6 +111,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '领围'
   })
+  @Min(0)
+  @Max(1000)
   neckWidth!: number
 
   @Column({
@@ -97,6 +121,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '胸宽'
   })
+  @Min(0)
+  @Max(1000)
   chestWidth!: number
 
   @Column({
@@ -105,6 +131,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '背宽'
   })
+  @Min(0)
+  @Max(1000)
   backWidth!: number
 
   @Column({
@@ -113,6 +141,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '中腰围'
   })
+  @Min(0)
+  @Max(1000)
   middleWaistline!: number
 
   @Column({
@@ -121,6 +151,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '前腰长'
   })
+  @Min(0)
+  @Max(1000)
   anteriorWaistLength!: number
 
   @Column({
@@ -129,6 +161,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '后腰长'
   })
+  @Min(0)
+  @Max(1000)
   backWaistLength!: number
 
   @Column({
@@ -137,6 +171,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '裤长'
   })
+  @Min(0)
+  @Max(1000)
   outseam!: number
 
   @Column({
@@ -153,6 +189,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '腰围'
   })
+  @Min(0)
+  @Max(1000)
   waistline!: number
 
   @Column({
@@ -161,6 +199,8 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '裤脚'
   })
+  @Min(0)
+  @Max(1000)
   legWidth!: number
 
   @Column({
@@ -169,5 +209,7 @@ export default class ClothTypeConsumption extends BaseEntity {
     default: 0.0,
     comment: '裙长'
   })
+  @Min(0)
+  @Max(1000)
   skirtLength!: number
 }

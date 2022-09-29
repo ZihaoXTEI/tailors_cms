@@ -32,6 +32,7 @@ export default class Menu {
     type: 'varchar',
     length: '64',
     nullable: true,
+    unique: true,
     comment: '菜单路径'
   })
   url!: string
@@ -43,6 +44,16 @@ export default class Menu {
     comment: '菜单样式'
   })
   style: string | undefined
+
+  @Column({
+    name: 'view_name',
+    type: 'varchar',
+    length: '64',
+    nullable: true,
+    unique: true,
+    comment: '页面文件名称'
+  })
+  viewName: string | undefined
 
   @Column({
     name: 'menu_type',
@@ -62,6 +73,7 @@ export default class Menu {
 
   @Column({
     type: 'smallint',
+    unique: true,
     comment: '菜单排序'
   })
   sort!: number

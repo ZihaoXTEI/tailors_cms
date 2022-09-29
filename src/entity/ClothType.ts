@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, OneToOne } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import Order from './Order'
 import ClothTypeConsumption from './ClothTypeConsumption'
+import { IsEnum, Length } from 'class-validator'
 
 @Entity('clothtype_tb')
 export default class ClothType extends BaseEntity {
@@ -13,6 +14,7 @@ export default class ClothType extends BaseEntity {
     unique: true,
     comment: '服装类型名称'
   })
+  @Length(2, 32, { message: '服装类型名称' })
   clothtypeName!: string
 
   @Column({
@@ -22,6 +24,7 @@ export default class ClothType extends BaseEntity {
     nullable: true,
     comment: '服装类型说明'
   })
+  @Length(0, 64, { message: '布料说明不超过 64 个字符' })
   clothtypeRemark: string | undefined
 
   @Column({
@@ -31,6 +34,7 @@ export default class ClothType extends BaseEntity {
     default: Season.SPRING,
     comment: '服装适合季节'
   })
+  @IsEnum(Season)
   clothtypeSeason!: Season
 
   @Column({
@@ -40,6 +44,7 @@ export default class ClothType extends BaseEntity {
     default: Gender.BOTH,
     comment: '服装适合性别'
   })
+  @IsEnum(Gender)
   clothtypeGender!: Gender
 
   @Column({

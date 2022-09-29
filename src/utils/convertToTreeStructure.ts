@@ -1,4 +1,4 @@
-import Permission from '../../entity/Permission'
+import Permission from '../entity/Permission'
 
 export const convertPermission = (permissionList: Permission[]): Permission[] => {
   const permissionMap: any = new Map()

@@ -13,7 +13,6 @@ database.then(() => {
 const app = new Koa()
 
 app.use(bodyParser())
-
 useRoutes(app)
 app.on('error', errorHandler)
 

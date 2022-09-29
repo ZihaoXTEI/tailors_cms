@@ -13,6 +13,7 @@ import User from './User'
 import Order from './Order'
 import Favorite from './Favorite'
 import AnthroMeasure from './AnthroMeasure'
+import { IsEnum, IsOptional, IsPhoneNumber, Length } from 'class-validator'
 
 @Entity('customer_tb')
 export default class Customer {
@@ -23,7 +24,7 @@ export default class Customer {
     nullable: false,
     comment: '顾客编号'
   })
-  userId!: String
+  userId!: string
 
   @Column({
     name: 'customer_name',
@@ -32,6 +33,7 @@ export default class Customer {
     nullable: false,
     comment: '顾客姓名'
   })
+  @Length(2, 16, { message: '顾客姓名名称不合法' })
   customerName!: String
 
   @Column({
@@ -41,6 +43,7 @@ export default class Customer {
     nullable: false,
     comment: '顾客性别'
   })
+  @IsEnum(Gender, { message: '顾客性别不合法' })
   customerGender!: Gender
 
   @Column({
@@ -50,6 +53,8 @@ export default class Customer {
     nullable: true,
     comment: '顾客联系电话'
   })
+  @IsOptional()
+  @IsPhoneNumber('CH', { message: '顾客联系电话不合法' })
   customerPhone!: string
 
   @Column({
@@ -59,6 +64,8 @@ export default class Customer {
     nullable: true,
     comment: '顾客住址'
   })
+  @IsOptional()
+  @Length(3, 60, { message: '员工住址不合法' })
   customerAddress!: string
 
   @Column({

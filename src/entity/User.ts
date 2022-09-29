@@ -13,6 +13,7 @@ import { Status } from '../types/entityType'
 import Role from './Role'
 import Customer from './Customer'
 import Staff from './Staff'
+import { Length } from 'class-validator'
 
 @Entity('user_tb')
 export default class User {
@@ -35,6 +36,7 @@ export default class User {
     unique: true,
     comment: '用户昵称'
   })
+  @Length(4, 24, { message: '用户昵称不合法' })
   nickname!: string
 
   @Column({
@@ -42,6 +44,7 @@ export default class User {
     length: 128,
     comment: '用户密码'
   })
+  @Length(6, 24, { message: '用户密码不合法' })
   password!: string
 
   @Column({
