@@ -30,16 +30,21 @@ class RoleService {
   }
 
   async getList(skip = 0, take = 10) {
-    const listPromise = this.repository
-      .createQueryBuilder(this.tableName)
-      .skip(skip)
-      .take(take)
-      .getMany()
+    const listPromise = this.repository.createQueryBuilder(this.tableName).skip(skip).take(take).getMany()
     const totalPromise = this.repository.count()
 
     const [list, total] = await Promise.all([listPromise, totalPromise])
 
     return { list, total }
+  }
+
+  async getRoleOption() {
+    const roleOption = await this.repository
+      .createQueryBuilder(this.tableName)
+      .select(['role_tb.id AS value', 'role_tb.roleName AS label'])
+      .getRawMany()
+
+    return roleOption
   }
 }
 

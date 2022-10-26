@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import supplierController from '../../controller/inventory/supplier.controller'
 import Supplier from '../../entity/Supplier'
 import { verifyAuth } from '../../middleware/auth.middleware'

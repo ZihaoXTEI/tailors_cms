@@ -70,12 +70,20 @@ class StaffService {
     }
 
     const staffList = staffListQuery.skip(skip).take(take).getMany()
-
     const staffTotal = staffListQuery.getCount()
 
     const [list, total] = await Promise.all([staffList, staffTotal])
 
     return { list, total }
+  }
+
+  async getStaffOption() {
+    const staffOption = await this.repository
+      .createQueryBuilder(this.tableName)
+      .select(['staff_tb.userId AS value', 'staff_tb.staffName AS label'])
+      .getRawMany()
+
+    return staffOption
   }
 }
 

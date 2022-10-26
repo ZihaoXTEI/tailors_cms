@@ -32,11 +32,22 @@ class MenuService {
   async getList() {
     // const listPromise = this.repository.createQueryBuilder(this.tableName).getMany()
     const listPromise = AppDataSource.getTreeRepository(Menu).findTrees()
-    const totalPromise = this.repository.count()
+
+    // const totalPromise = this.repository.count()
+    const totalPromise = AppDataSource.getTreeRepository(Menu).count()
 
     const [list, total] = await Promise.all([listPromise, totalPromise])
 
     return { list, total }
+  }
+
+  async getMenuOption() {
+    const menuOption = await this.repository
+      .createQueryBuilder(this.tableName)
+      .select(['menu_tb.id AS value', 'menu_tb.menuName AS label', 'url'])
+      .getRawMany()
+
+    return menuOption
   }
 }
 

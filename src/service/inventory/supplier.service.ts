@@ -29,17 +29,36 @@ class SupplierService {
     return result
   }
 
-  async getList(skip = 0, take = 10) {
-    const listPromise = this.repository
-      .createQueryBuilder(this.tableName)
-      .skip(skip)
-      .take(take)
-      .getMany()
-    const totalPromise = this.repository.count()
+  async getList(skip = 0, take = 10, queryInfo: any = {}) {
+    const { id = '', supplierName = '', supplierPhone = '', supplierAddress = '' } = queryInfo
 
-    const [list, total] = await Promise.all([listPromise, totalPromise])
+    const supplierListQuery = this.repository
+      .createQueryBuilder(this.tableName)
+      .where(`${this.tableName}.id LIKE :id`, { id: `%${id}%` })
+      .andWhere(`${this.tableName}.supplier_name LIKE :supplierName`, { supplierName: `%${supplierName}%` })
+      .andWhere(`${this.tableName}.supplier_address LIKE :supplierAddress`, { supplierAddress: `%${supplierAddress}%` })
+
+    if (supplierPhone !== '') {
+      supplierListQuery.andWhere(`${this.tableName}.supplier_phone = :supplierPhone`, {
+        supplierPhone: `${supplierPhone}`
+      })
+    }
+
+    const supplierList = supplierListQuery.skip(skip).take(take).getMany()
+    const totalPromise = supplierListQuery.getCount()
+
+    const [list, total] = await Promise.all([supplierList, totalPromise])
 
     return { list, total }
+  }
+
+  async getSupplierOption() {
+    const supplierOption = await this.repository
+      .createQueryBuilder(this.tableName)
+      .select(['supplier_tb.id AS value', 'supplier_tb.supplierName AS label'])
+      .getRawMany()
+
+    return supplierOption
   }
 }
 

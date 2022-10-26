@@ -29,19 +29,33 @@ class FabricTypeService {
   }
 
   async getFabricTypeList(skip = 0, take = 10, queryInfo: any = {}) {
-    const { id = '', fabrictypeName = '' } = queryInfo
-    const listPromise = this.repository
+    const { id = '', fabrictypeName = '', fabricCategory = '' } = queryInfo
+    const fabricTypeQuery = this.repository
       .createQueryBuilder(this.tableName)
       .where(`${this.tableName}.id LIKE :id`, { id: `%${id}%` })
       .andWhere(`${this.tableName}.fabrictype_name LIKE :fabrictypeName`, { fabrictypeName: `%${fabrictypeName}%` })
-      .skip(skip)
-      .take(take)
-      .getMany()
-    const totalPromise = this.repository.count()
 
-    const [list, total] = await Promise.all([listPromise, totalPromise])
+    if (fabricCategory !== '') {
+      fabricTypeQuery.andWhere('fabrictype_tb.fabric_category = :fabricCategory', {
+        fabricCategory: `${fabricCategory}`
+      })
+    }
+
+    const fabricTypeList = fabricTypeQuery.skip(skip).take(take).getMany()
+    const totalPromise = fabricTypeQuery.getCount()
+
+    const [list, total] = await Promise.all([fabricTypeList, totalPromise])
 
     return { list, total }
+  }
+
+  async getFabricTypeOption() {
+    const fabricTypeOption = await this.repository
+      .createQueryBuilder('fabrictype_tb')
+      .select(['fabrictype_tb.id AS value', 'fabrictype_tb.fabrictypeName AS label'])
+      .getRawMany()
+
+    return fabricTypeOption
   }
 }
 

@@ -13,7 +13,7 @@ import User from './User'
 import Order from './Order'
 import Favorite from './Favorite'
 import AnthroMeasure from './AnthroMeasure'
-import { IsEnum, IsOptional, IsPhoneNumber, Length } from 'class-validator'
+import { IsEnum, IsOptional, IsPhoneNumber, IsUUID, Length } from 'class-validator'
 
 @Entity('customer_tb')
 export default class Customer {
@@ -24,6 +24,7 @@ export default class Customer {
     nullable: false,
     comment: '顾客编号'
   })
+  @IsUUID()
   userId!: string
 
   @Column({
@@ -33,7 +34,7 @@ export default class Customer {
     nullable: false,
     comment: '顾客姓名'
   })
-  @Length(2, 16, { message: '顾客姓名名称不合法' })
+  @Length(2, 16, { message: '顾客姓名不合法' })
   customerName!: String
 
   @Column({

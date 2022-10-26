@@ -1,3 +1,4 @@
+import { ArrayUnique, IsArray, IsOptional, IsPositive } from 'class-validator'
 import {
   Column,
   CreateDateColumn,
@@ -20,6 +21,7 @@ export default class RolePermission {
     type: 'int',
     unique: false
   })
+  @IsPositive()
   permissionId!: number
 
   @ManyToMany(() => Permission, (permission) => permission.roleList)
@@ -35,6 +37,7 @@ export default class RolePermission {
     type: 'int',
     unique: false
   })
+  @IsPositive()
   roleId!: number
 
   @ManyToMany(() => Role, (role) => role.permissionList)
@@ -56,4 +59,9 @@ export default class RolePermission {
     comment: '更新时间'
   })
   updateAt!: Date
+
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  permissionIdList!: number[]
 }

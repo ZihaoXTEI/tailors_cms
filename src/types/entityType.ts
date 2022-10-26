@@ -13,10 +13,10 @@ export enum Status {
 
 // 季节
 export enum Season {
-  SPRING = 0,
-  SUMMER = 1,
-  AUTUMN = 2,
-  WINTER = 3
+  SPRING = '春天',
+  SUMMER = '夏天',
+  AUTUMN = '秋天',
+  WINTER = '冬天'
 }
 
 // 支付方式
@@ -54,4 +54,12 @@ export enum OrderStatus {
   IRONED = 4, // 整烫
   FINISHED = 5, // 完成
   DELIVERED = 6 // 交付
+}
+
+// 布料种类
+export enum FabricCategory {
+  SHELL_FABRIC = '面料',
+  LINING = '里料',
+  PADDING = '絮填料',
+  INTERMASS = '衬料'
 }

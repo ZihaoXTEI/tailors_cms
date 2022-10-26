@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import menuController from '../../controller/system/menu.controller'
 import Menu from '../../entity/Menu'
 import { verifyAuth } from '../../middleware/auth.middleware'
@@ -20,6 +20,6 @@ menuRouter.put('/:menuId', verifyAuth, usingValidation(Menu), menuController.upd
 menuRouter.get('/:menuId', verifyAuth, menuController.getMenuById)
 
 // 获取菜单数据列表
-menuRouter.get('/', verifyAuth, menuController.getMenuList)
+menuRouter.post('/list', verifyAuth, menuController.getMenuList)
 
 export default menuRouter

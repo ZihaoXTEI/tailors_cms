@@ -3,6 +3,7 @@ import ErrorType from '../../constant/errorType'
 import SuccessType from '../../constant/successType'
 import FabricService from '../../service/inventory/fabric.service'
 import ErrorObject from '../../utils/errorObject'
+import { objectArrayFlat } from '../../utils/objectUtil'
 import SuccessObject from '../../utils/successObject'
 
 class FabricController {
@@ -14,16 +15,13 @@ class FabricController {
     console.log(body)
 
     try {
-      await this.fabricService.insert(body)
+      await this.fabricService.insertFabric(body)
       const data = new SuccessObject(SuccessType.CREATED, `添加${this.chineseName}数据成功`)
       ctx.status = SuccessType.CREATED
       ctx.body = data
     } catch (err) {
       console.log(err)
-      const error = new ErrorObject(
-        `添加${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`添加${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -33,14 +31,11 @@ class FabricController {
     console.log(fabricId)
 
     try {
-      await this.fabricService.delete(fabricId)
+      await this.fabricService.deleteFabric(fabricId)
       const data = new SuccessObject(SuccessType.OK, `删除${this.chineseName}数据成功`)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `删除${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`删除${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -50,14 +45,12 @@ class FabricController {
     const { body } = ctx.request
 
     try {
-      await this.fabricService.update(fabricId, body)
+      await this.fabricService.updateFabric(fabricId, body)
       const data = new SuccessObject(SuccessType.CREATED, `更新${this.chineseName}数据成功`)
       ctx.body = data
-    } catch {
-      const error = new ErrorObject(
-        `更新${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+    } catch (err) {
+      console.log(err)
+      const error = new ErrorObject(`更新${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -66,14 +59,11 @@ class FabricController {
     const { fabricId } = ctx.params
 
     try {
-      const result = await this.fabricService.getById(fabricId)
+      const result = await this.fabricService.getFabricById(fabricId)
       const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
       ctx.body = data
     } catch {
-      const error = new ErrorObject(
-        `获取${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
@@ -82,18 +72,20 @@ class FabricController {
     const { skip, take } = ctx.request.body
 
     try {
-      const result = await this.fabricService.getList(skip, take)
-      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
+      const result = await this.fabricService.getFabricList(skip, take, ctx.request.body)
+
+      const processedData = objectArrayFlat(result.list, 'fabricType', ['fabricCategory', 'fabrictypeName'])
+      const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, {
+        list: processedData,
+        total: result.total
+      })
       ctx.body = data
     } catch (err) {
       console.log(err)
-      const error = new ErrorObject(
-        `获取${this.chineseName}数据错误`,
-        ErrorType.INTERNAL_SERVER_ERROR
-      )
+      const error = new ErrorObject(`获取${this.chineseName}数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
       return ctx.app.emit('error', error, ctx)
     }
   }
 }
 
-export default new FabricController()
+export default FabricController

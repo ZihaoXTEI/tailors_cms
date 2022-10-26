@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import authController from '../controller/auth.controller'
 import { verifyAuth, verifyLogin, setTokenToHeader } from '../middleware/auth.middleware'
 

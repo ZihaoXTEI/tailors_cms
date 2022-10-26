@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import clothTypeConsumptionController from '../../controller/data/clothTypeConsumption.controller'
 import ClothTypeConsumption from '../../entity/ClothTypeConsumption'
 import { verifyAuth } from '../../middleware/auth.middleware'
@@ -24,7 +24,7 @@ clothTypeConsumptionRouter.delete(
 
 // 修改指定布料消耗数据
 clothTypeConsumptionRouter.put(
-  './:clothConsumptionId',
+  '/:clothConsumptionId',
   verifyAuth,
   usingValidation(ClothTypeConsumption),
   clothTypeConsumptionController.updateClothTypeConsumption

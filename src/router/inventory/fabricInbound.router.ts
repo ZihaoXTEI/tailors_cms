@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import fabricInboundController from '../../controller/inventory/fabricInbound.controller'
 import FabricInbound from '../../entity/FabricInbound'
 import { verifyAuth } from '../../middleware/auth.middleware'
@@ -9,34 +9,25 @@ const fabricInboundRouter = new Router({ prefix: '/inventory/fabricinbound' })
 
 // 添加布料入库数据
 // 添加布料库存数据
-fabricInboundRouter.post(
-  '/',
-  verifyAuth,
-  usingValidation(FabricInbound),
-  fabricInboundController.createFabricInbound
-)
+fabricInboundRouter.post('/', verifyAuth, usingValidation(FabricInbound), fabricInboundController.createFabricInbound)
 
 // 删除指定布料入库数据
 // 更新布料库存数据
-fabricInboundRouter.delete(
-  '/:fabricInboundId',
-  verifyAuth,
-  fabricInboundController.deleteFabricInbound
-)
+fabricInboundRouter.delete('/:fabricInboundId', verifyAuth, fabricInboundController.deleteFabricInbound)
 
 // 修改指定布料入库数据
 // 更新布料库存数据
 fabricInboundRouter.put(
-  './:fabricInboundId',
+  '/:fabricInboundId',
   verifyAuth,
   usingValidation(FabricInbound),
   fabricInboundController.updateFabricInbound
 )
 
 // 查找指定布料入库数据（根据 fabricInboundId）
-fabricInboundRouter.get('/:fabricInboundId', fabricInboundController.getFabricInboundById)
+fabricInboundRouter.get('/:fabricInboundId', verifyAuth, fabricInboundController.getFabricInboundById)
 
 // 获取布料入库数据列表
-fabricInboundRouter.get('/', fabricInboundController.getFabricInboundList)
+fabricInboundRouter.post('/list', fabricInboundController.getFabricInboundList)
 
 export default fabricInboundRouter

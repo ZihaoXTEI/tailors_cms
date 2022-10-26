@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import clothTypeController from '../../controller/data/clothType.controller'
 import ClothType from '../../entity/ClothType'
 import { verifyAuth } from '../../middleware/auth.middleware'

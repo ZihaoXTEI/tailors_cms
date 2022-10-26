@@ -30,7 +30,7 @@ export default class Staff {
     length: 16,
     comment: '职员姓名'
   })
-  @Length(2, 16, { message: '职员姓名名称不合法' })
+  @Length(2, 16, { message: '职员姓名不合法' })
   staffName!: string
 
   @Column({

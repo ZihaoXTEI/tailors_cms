@@ -33,12 +33,16 @@ class PermissionService {
   }
 
   async getList(skip = 0, take = 10) {
-    const listPromise = this.repository
-      .createQueryBuilder(this.tableName)
-      .skip(skip)
-      .take(take)
-      .getMany()
-    const totalPromise = this.repository.count()
+    // const listPromise = this.repository.createQueryBuilder(this.tableName).skip(skip).take(take).getMany()
+    // const totalPromise = this.repository.count()
+
+    // const [list, total] = await Promise.all([listPromise, totalPromise])
+
+    // return { list, total }
+
+    const listPromise = AppDataSource.getTreeRepository(Permission).findTrees()
+
+    const totalPromise = AppDataSource.getTreeRepository(Permission).count()
 
     const [list, total] = await Promise.all([listPromise, totalPromise])
 
@@ -60,6 +64,8 @@ class PermissionService {
     //   })
     //   .setParameter('roleId', roleId)
     //   .getMany()
+
+    // 下面是正确的
     const list = await this.repository
       .createQueryBuilder(this.tableName)
       .where((qb) => {
@@ -90,6 +96,32 @@ class PermissionService {
     }
 
     return result
+  }
+
+  async getPermissionOption() {
+    const roots = await AppDataSource.getTreeRepository(Permission).findRoots()
+    // const permissionOption = await Promise.all(
+    //   roots.map((root) => AppDataSource.getTreeRepository(Permission).findDescendantsTree(root))
+    // )
+
+    // return permissionOption
+
+    await Promise.all(
+      roots.map(async (root) => {
+        root.childPermissionList = await AppDataSource.getTreeRepository(Permission)
+          .createDescendantsQueryBuilder('permission_tb', 'permission_tbClosure', root)
+          .select(['permission_tb.id AS value', 'permission_tb.permissionName AS label'])
+          .where(`${this.tableName}.parentId = ${root.id}`)
+          .getRawMany()
+        return root
+      })
+    )
+
+    const permissionOption = roots.map((root) => {
+      return { label: root.permissionName, value: root.id, children: root.childPermissionList }
+    })
+
+    return permissionOption
   }
 }
 

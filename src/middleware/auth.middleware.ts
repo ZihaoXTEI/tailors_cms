@@ -9,6 +9,8 @@ import ErrorObject from '../utils/errorObject'
 const verifyLogin = async (ctx: Context, next: Next) => {
   const { nickname, password } = ctx.request.body
 
+  console.log(ctx.request.body)
+
   // 判断用户名和密码是否为空
   if (!nickname || !password) {
     console.log('用户名或密码为空')
@@ -56,7 +58,7 @@ const verifyAuth = async (ctx: Context, next: Next) => {
   if (!authorization) {
     // 没有token
     // const error = new Error('无效 token')
-    const error = new ErrorObject('无效 token', ErrorType.BAD_REQUEST)
+    const error = new ErrorObject('无效 token[没有token]', ErrorType.BAD_REQUEST)
 
     return ctx.app.emit('error', error, ctx)
   }
@@ -71,7 +73,8 @@ const verifyAuth = async (ctx: Context, next: Next) => {
 
     ctx.user = result
     await next()
-  } catch {
+  } catch (err) {
+    console.log(err)
     const error = new ErrorObject('无效 token', ErrorType.BAD_REQUEST)
 
     ctx.app.emit('error', error, ctx)

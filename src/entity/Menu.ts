@@ -13,6 +13,7 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 import Permission from './Permission'
+import { IsEnum, IsOptional, IsPositive, IsString, Length, Max, Min } from 'class-validator'
 
 @Entity('menu_tb')
 @Tree('materialized-path')
@@ -26,6 +27,7 @@ export default class Menu {
     length: 24,
     comment: '菜单名称'
   })
+  @Length(2, 20, { message: '菜单名称不合法' })
   menuName!: string
 
   @Column({
@@ -35,14 +37,17 @@ export default class Menu {
     unique: true,
     comment: '菜单路径'
   })
+  @Length(4, 60, { message: '菜单路径不合法' })
   url!: string
 
   @Column({
     type: 'varchar',
-    length: '16',
+    length: '32',
     nullable: true,
     comment: '菜单样式'
   })
+  @IsOptional()
+  @IsString()
   style: string | undefined
 
   @Column({
@@ -53,6 +58,8 @@ export default class Menu {
     unique: true,
     comment: '页面文件名称'
   })
+  @IsOptional()
+  @IsString()
   viewName: string | undefined
 
   @Column({
@@ -62,6 +69,7 @@ export default class Menu {
     default: ClientType.CMS,
     comment: '菜单类型'
   })
+  @IsEnum(ClientType)
   menuType!: ClientType
 
   @Column({
@@ -69,6 +77,8 @@ export default class Menu {
     type: 'tinyint',
     comment: '菜单级别'
   })
+  @Min(0, { message: '菜单级别不合法' })
+  @Max(100, { message: '菜单级别不合法' })
   menuLevel!: number
 
   @Column({
@@ -76,6 +86,8 @@ export default class Menu {
     unique: true,
     comment: '菜单排序'
   })
+  @Min(0, { message: '菜单排序不合法' })
+  @Max(1000, { message: '菜单排序不合法' })
   sort!: number
 
   @Column({
@@ -106,6 +118,8 @@ export default class Menu {
     type: 'number',
     nullable: true
   })
+  @IsOptional()
+  @IsPositive()
   parentId!: number
 
   @ManyToOne((type) => Menu, (menu) => menu.childMenuList)

@@ -70,7 +70,7 @@ class SupplierController {
     const { skip, take } = ctx.request.body
 
     try {
-      const result = await this.supplierService.getList(skip, take)
+      const result = await this.supplierService.getList(skip, take, ctx.request.body)
       const data = new SuccessObject(SuccessType.OK, `获取${this.chineseName}数据成功`, result)
       ctx.body = data
     } catch (err) {

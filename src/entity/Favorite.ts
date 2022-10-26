@@ -1,3 +1,4 @@
+import { IsUUID } from 'class-validator'
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import Customer from './Customer'
@@ -10,6 +11,7 @@ export default class Favorite extends BaseEntity {
     type: 'varchar',
     length: 36
   })
+  @IsUUID()
   fabricId!: string
 
   @ManyToOne(() => Fabric, (fabric) => fabric.favoriteList)
@@ -23,6 +25,7 @@ export default class Favorite extends BaseEntity {
     type: 'varchar',
     length: 36
   })
+  @IsUUID()
   customerId!: string
 
   @ManyToOne(() => Customer, (customer) => customer.favoriteList)

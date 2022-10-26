@@ -3,8 +3,10 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
 import BaseEntity from './BaseEntity'
 import FabricInbound from './FabricInbound'
 import FabricType from './FabricType'
+import FabricImage from './FabricImage'
 import Favorite from './Favorite'
 import OrderFabric from './OrderFabric'
+import { IsEnum, IsUUID, Length, Max, Min } from 'class-validator'
 
 @Entity('fabric_tb')
 export default class Fabric extends BaseEntity {
@@ -15,6 +17,7 @@ export default class Fabric extends BaseEntity {
     unique: true,
     comment: '布料名称'
   })
+  @Length(4, 32, { message: '布料名称不合法' })
   fabricName!: string
 
   @Column({
@@ -23,6 +26,7 @@ export default class Fabric extends BaseEntity {
     enum: FabricWidth,
     comment: '布料幅宽'
   })
+  @IsEnum(FabricWidth)
   fabricWidth!: FabricWidth
 
   @Column({
@@ -31,16 +35,9 @@ export default class Fabric extends BaseEntity {
     default: 0.0,
     comment: '布料价格'
   })
+  @Min(0, { message: '布料价格不合法' })
+  @Max(10000, { message: '布料价格不合法' })
   fabricPrice!: number
-
-  @Column({
-    name: 'fabric_url',
-    type: 'varchar',
-    length: 128,
-    default: '',
-    comment: '布料图片路径'
-  })
-  fabricUrl!: string
 
   @Column({
     name: 'fabric_feature',
@@ -49,6 +46,7 @@ export default class Fabric extends BaseEntity {
     default: '',
     comment: '布料特性'
   })
+  @Length(5, 80, { message: '布料特性不合法' })
   fabricFeature!: string
 
   @Column({
@@ -58,6 +56,7 @@ export default class Fabric extends BaseEntity {
     default: Season.SPRING,
     comment: '布料适合季节'
   })
+  @IsEnum(Season)
   fabricSeason!: Season
 
   @Column({
@@ -67,6 +66,7 @@ export default class Fabric extends BaseEntity {
     default: Gender.BOTH,
     comment: '布料适合性别'
   })
+  @IsEnum(Gender)
   fabricGender!: Gender
 
   @Column({
@@ -82,6 +82,7 @@ export default class Fabric extends BaseEntity {
     type: 'varchar',
     length: 36
   })
+  @IsUUID()
   fabricTypeId!: string
 
   @ManyToOne(() => FabricType, (fabricType) => fabricType.fabricList)
@@ -98,4 +99,7 @@ export default class Fabric extends BaseEntity {
 
   @OneToMany(() => Favorite, (favorite) => favorite.fabric)
   favoriteList!: Favorite[]
+
+  @OneToMany(() => FabricImage, (fabricImage) => fabricImage.fabric)
+  fabricImageList!: FabricImage[] | undefined
 }

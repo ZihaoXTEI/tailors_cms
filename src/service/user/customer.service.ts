@@ -71,6 +71,15 @@ class CustomerService {
     console.log(list)
     return { list, total }
   }
+
+  async getCustomerOption() {
+    const customerOption = await this.repository
+      .createQueryBuilder(this.tableName)
+      .select(['customer_tb.userId AS value', 'customer_tb.customerName AS label'])
+      .getRawMany()
+
+    return customerOption
+  }
 }
 
 export default CustomerService

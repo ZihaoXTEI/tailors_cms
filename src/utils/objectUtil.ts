@@ -1,39 +1,55 @@
-export const objectFlat = (obj: any, targetObject: string, attributes: string | Array<string>): any => {
+export const objectFlat = (obj: any, targetObject: string | Array<string>, attributes: string | Array<string>): any => {
   const currentObj = deepClone(obj)
 
-  if (Object.hasOwn(obj, targetObject)) {
-    if (typeof attributes === 'string' && Object.prototype.toString.call(attributes) == '[object String]') {
-      // 判断 attributes 是字符串类型
-      const target = obj[targetObject]
-
-      if (!target) return
-
-      const attribute = target[attributes]
-
-      // 对属性名称为 id 进行修改
-      const attributeName = attributes === 'id' ? `${targetObject}Id` : attributes
-      currentObj[attributeName] = attribute
-    } else if (Array.isArray(attributes)) {
-      // 如果  attributes 是数组类型
-      for (let i = 0; i < attributes.length; i++) {
+  const _flat = (targetObject: string) => {
+    if (Object.hasOwn(obj, targetObject)) {
+      if (typeof attributes === 'string' && Object.prototype.toString.call(attributes) == '[object String]') {
+        // 判断 attributes 是字符串类型
         const target = obj[targetObject]
 
         if (!target) return
 
-        const attribute = target[attributes[i]]
+        const attribute = target[attributes]
 
         // 对属性名称为 id 进行修改
-        const attributeName = attributes[i] === 'id' ? `${targetObject}Id` : attributes[i]
+        const attributeName = attributes === 'id' ? `${targetObject}Id` : attributes
         currentObj[attributeName] = attribute
+      } else if (Array.isArray(attributes)) {
+        // 如果  attributes 是数组类型
+        for (let i = 0; i < attributes.length; i++) {
+          const target = obj[targetObject]
+
+          if (!target) continue
+
+          const attribute = target[attributes[i]]
+
+          if (!attribute) continue
+
+          // 对属性名称为 id 进行修改
+          const attributeName = attributes[i] === 'id' ? `${targetObject}Id` : attributes[i]
+          currentObj[attributeName] = attribute
+        }
       }
+      delete currentObj[targetObject]
     }
-    delete currentObj[targetObject]
+  }
+
+  if (typeof targetObject === 'string' && Object.prototype.toString.call(targetObject) == '[object String]') {
+    _flat(targetObject)
+  } else if (Array.isArray(targetObject)) {
+    targetObject.forEach((target) => {
+      _flat(target)
+    })
   }
 
   return currentObj
 }
 
-export const objectArrayFlat = (array: Array<any>, targetObject: string, attributes: string | Array<string>): any[] => {
+export const objectArrayFlat = (
+  array: Array<any>,
+  targetObject: string | Array<string>,
+  attributes: string | Array<string>
+): any[] => {
   if (!Array.isArray(array) || array.length === 0) {
     return []
   }

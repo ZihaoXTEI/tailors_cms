@@ -9,12 +9,17 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
   UpdateDateColumn
 } from 'typeorm'
 import Menu from './Menu'
 import Role from './Role'
+import { IsOptional, IsPositive, Length } from 'class-validator'
 
 @Entity('permission_tb')
+@Tree('materialized-path')
 export default class Permission {
   @PrimaryGeneratedColumn()
   id!: number
@@ -25,6 +30,7 @@ export default class Permission {
     length: 32,
     comment: '权限名称'
   })
+  @Length(2, 30, { message: '权限名称不合法' })
   permissionName!: string
 
   @Column({
@@ -33,6 +39,7 @@ export default class Permission {
     length: 64,
     comment: '权限描述'
   })
+  @Length(5, 60, { message: '权限描述不合法' })
   permissionDescribe: string | undefined
 
   @Column({
@@ -42,6 +49,8 @@ export default class Permission {
     nullable: true,
     comment: '权限说明'
   })
+  @IsOptional()
+  @Length(5, 60, { message: '权限说明不合法' })
   permissionRemark: string | undefined
 
   @Column({
@@ -49,6 +58,8 @@ export default class Permission {
     type: 'int',
     nullable: true
   })
+  @IsOptional()
+  @IsPositive()
   parentId!: number
 
   @ManyToOne((type) => Permission, (permission) => permission.childPermissionList)
@@ -56,9 +67,11 @@ export default class Permission {
     name: 'parent_id',
     referencedColumnName: 'id'
   })
-  parentPermission!: Permission
+  @TreeParent()
+  parentPermission: Permission | undefined
 
   @OneToMany(() => Permission, (permission) => permission.parentPermission)
+  @TreeChildren()
   childPermissionList!: Permission[]
 
   @Column({
@@ -73,6 +86,8 @@ export default class Permission {
     name: 'menu_id',
     type: 'int'
   })
+  @IsOptional()
+  @IsPositive()
   menuId!: number
 
   @ManyToOne(() => Menu, (menu) => menu.permissionList)

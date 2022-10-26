@@ -1,4 +1,4 @@
-import Router from 'koa-router'
+import Router from '@koa/router'
 import FabricTypeController from '../../controller/data/fabricType.controller'
 import FabricType from '../../entity/FabricType'
 import { verifyAuth } from '../../middleware/auth.middleware'
@@ -15,7 +15,7 @@ fabricTypeRouter.post('/', verifyAuth, usingValidation(FabricType), fabricTypeCo
 fabricTypeRouter.delete('/:fabricTypeId', verifyAuth, fabricTypeController.deleteFabricType)
 
 // 修改指定布料类型数据
-fabricTypeRouter.put('./:fabricTypeId', verifyAuth, usingValidation(FabricType), fabricTypeController.updateFabricType)
+fabricTypeRouter.put('/:fabricTypeId', verifyAuth, usingValidation(FabricType), fabricTypeController.updateFabricType)
 
 // 查找指定布料类型数据
 fabricTypeRouter.get('/:fabricTypeId', fabricTypeController.getFabricTypeById)

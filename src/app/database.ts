@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
   password: MYSQL_PASSWORD,
   database: MYSQL_DATABASE,
   entities: [__dirname + '/../entity/*.ts'],
-  synchronize: true,
+  synchronize: false,
   logging: false
 })
 

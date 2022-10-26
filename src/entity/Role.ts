@@ -10,6 +10,7 @@ import {
 } from 'typeorm'
 import Permission from './Permission'
 import User from './User'
+import { IsOptional, Length } from 'class-validator'
 
 @Entity('role_tb')
 export default class Role {
@@ -23,6 +24,7 @@ export default class Role {
     nullable: false,
     comment: '角色名称'
   })
+  @Length(3, 24, { message: '角色名称不合法' })
   roleName!: string
 
   @Column({
@@ -32,6 +34,8 @@ export default class Role {
     nullable: true,
     comment: '角色说明'
   })
+  @IsOptional()
+  @Length(5, 60, { message: '角色说明不合法' })
   roleRemark: string | undefined
 
   @Column({
