@@ -58,6 +58,15 @@ class ClothTypeService {
 
     return { list, total }
   }
+
+  async getClothTypeOption() {
+    const clothTypeOption = await this.clothTypeRepository
+      .createQueryBuilder('clothtype_tb')
+      .select(['clothtype_tb.id AS value', 'clothtype_tb.clothtypeName AS label'])
+      .getRawMany()
+
+    return clothTypeOption
+  }
 }
 
-export default new ClothTypeService()
+export default ClothTypeService

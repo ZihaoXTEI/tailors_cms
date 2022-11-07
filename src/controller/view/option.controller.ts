@@ -1,6 +1,7 @@
 import { Context } from 'koa'
 import ErrorType from '../../constant/errorType'
 import SuccessType from '../../constant/successType'
+import ClothTypeService from '../../service/data/clothType.service'
 import FabricTypeService from '../../service/data/fabricType.service'
 import FabricService from '../../service/inventory/fabric.service'
 import SupplierService from '../../service/inventory/supplier.service'
@@ -13,6 +14,7 @@ import ErrorObject from '../../utils/errorObject'
 import SuccessObject from '../../utils/successObject'
 
 class OptionController {
+  private clothTypeService = new ClothTypeService()
   private fabricTypeService = new FabricTypeService()
   private fabricService = new FabricService()
   private supplierService = new SupplierService()
@@ -21,6 +23,18 @@ class OptionController {
   private menuService = new MenuService()
   private roleService = new RoleService()
   private permissionService = new PermissionService()
+
+  getClothTypeOption = async (ctx: Context) => {
+    try {
+      const optionList = await this.clothTypeService.getClothTypeOption()
+      const data = new SuccessObject(SuccessType.OK, `获取数据成功`, optionList)
+      ctx.body = data
+    } catch (err) {
+      console.log(err)
+      const error = new ErrorObject(`获取数据错误`, ErrorType.INTERNAL_SERVER_ERROR)
+      return ctx.app.emit('error', error, ctx)
+    }
+  }
 
   getFabricTypeOption = async (ctx: Context) => {
     try {

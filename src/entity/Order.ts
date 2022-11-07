@@ -76,8 +76,8 @@ export default class Order {
     default: 0.0,
     comment: '预订金额'
   })
-  @Min(10, { message: '订单总价格不合法' })
-  @Max(100000, { message: '订单总价格不合法' })
+  @Min(10, { message: '预订金额不合法' })
+  @Max(100000, { message: '预订金额不合法' })
   bookedAmount!: number
 
   @Column({

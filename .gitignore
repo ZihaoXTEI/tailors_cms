@@ -7,6 +7,7 @@ OOAD
 key
 *.key
 .env
+upload
 
 
 # local env files

@@ -5,6 +5,9 @@ import { verifyAuth } from '../../middleware/auth.middleware'
 const optionRouter = new Router({ prefix: '/option' })
 const optionController = new OptionController()
 
+// 服装类型
+optionRouter.get('/clothtype', verifyAuth, optionController.getClothTypeOption)
+
 // 布料类型
 optionRouter.get('/fabrictype', verifyAuth, optionController.getFabricTypeOption)
 
